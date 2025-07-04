@@ -15,13 +15,14 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var utilisateur in @Model!)
+            @foreach (Jeu jeu in @Model!)
             {
                 <tr>
-                    <td>@(utilisateur.Id)</td>
-                    <td>@(utilisateur.Titre)</td>
-                    <td>@(utilisateur.Description)</td>
-                    <td>@(utilisateur.Date_ajout)</td>
+                    <td>@(jeu.Id)</td>
+                    <td>@(jeu.Titre)</td>
+                    <td>@(jeu.Description)</td>
+                    <td>@(jeu.Date_ajout)</td>
+                    <td><a asp-controller="Jeux" asp-action="Detail" asp-route-id="@(jeu.Id)">Voir le Jeu</a></td>
                 </tr>
             }
         </tbody>
