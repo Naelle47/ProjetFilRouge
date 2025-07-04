@@ -51,7 +51,7 @@ namespace ProjetFilRouge.Controllers
             {
                 try
                 {
-                    jeu = connexion.QuerySingle<Jeu>(query, new {identifiant = id});
+                    jeu = connexion.QuerySingle<Jeu>(query, new {identifiant = id}); // {identifiant = id} -> objet anonyme entre accolades.
                 }
                 catch (SystemException)
                 {
