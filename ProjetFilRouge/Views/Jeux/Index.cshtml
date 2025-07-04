@@ -1,0 +1,29 @@
+﻿@model List<Jeu>
+@{
+    ViewData["Title"] = "Catalogue des Jeux";
+}
+
+<div>
+    <h1>Catalogue des Jeux</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Date d'ajout</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var utilisateur in @Model!)
+            {
+                <tr>
+                    <td>@(utilisateur.Id)</td>
+                    <td>@(utilisateur.Titre)</td>
+                    <td>@(utilisateur.Description)</td>
+                    <td>@(utilisateur.Date_ajout)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div> 
