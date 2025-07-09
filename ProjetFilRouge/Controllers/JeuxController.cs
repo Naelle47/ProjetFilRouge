@@ -46,19 +46,19 @@ namespace ProjetFilRouge.Controllers
             // exécuter la requête SQL
             // retourner la vue contenant le résultat
             string query = "SELECT * from Jeux WHERE id=@identifiant";
-            Jeu jeu;
+            Jeu jeux;
             using (var connexion = new NpgsqlConnection(_connexionString))
             {
                 try
                 {
-                    jeu = connexion.QuerySingle<Jeu>(query, new {identifiant = id}); // {identifiant = id} -> objet anonyme entre accolades.
+                    jeux = connexion.QuerySingle<Jeu>(query, new {identifiant = id}); // {identifiant = id} -> objet anonyme entre accolades.
                 }
                 catch (SystemException)
                 {
                     return NotFound();
                 }
             }
-            return View(jeu);
+            return View(jeux);
         }
     }
 }
