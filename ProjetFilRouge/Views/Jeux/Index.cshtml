@@ -18,11 +18,11 @@
             @foreach (Jeu jeu in @Model!)
             {
                 <tr>
-                    <td>@(jeu.Id)</td>
+                    <td>@(jeu.JeuId)</td>
                     <td>@(jeu.Titre)</td>
                     <td>@(jeu.Description)</td>
-                    <td>@(jeu.Date_ajout)</td>
-                    <td><a asp-controller="Jeux" asp-action="Detail" asp-route-id="@(jeu.Id)">Détails</a></td>
+                    <td>@(jeu.DateAjout)</td>
+                    <td><a asp-controller="Jeux" asp-action="Detail" asp-route-id="@(jeu.JeuId)">Détails</a></td>
                 </tr>
             }
         </tbody>
