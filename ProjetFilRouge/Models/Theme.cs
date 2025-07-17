@@ -10,6 +10,7 @@ namespace ProjetFilRouge.Models
         [StringLength(50, ErrorMessage = "Le nom ne doit pas dépasser 50 caractères.")]
         public string? Nom { get; set; }
 
+
         [StringLength(120, ErrorMessage = "La description ne doit pas dépasser 120 caractères.")]
         public string? Description { get; set; }
     }
