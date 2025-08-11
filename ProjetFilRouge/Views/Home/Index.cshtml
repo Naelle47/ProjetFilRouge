@@ -1,8 +1,78 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="hero | padding-block-900">
+    <div class="container">
+        <div class="even-columns">
+            <div class="flow">
+                <p class="tagline">The ultimate gaming bar</p>
+                <h1>Welcome to Nivo</h1>
+                <p class="subheading">Where Great Games Meet Great Drinks</p>
+                <p>
+                    Step into a vibrant space where the thrill of board games meets
+                    the comfort of a cozy bar. At Nivo, we serve up our very own
+                    custom brews, carefully crafted to pair perfectly with your game
+                    night. Whether you're a seasoned strategist or just here for a
+                    laugh with friends, there’s something for everyone. Discover new
+                    games, meet fellow enthusiasts, and unwind in a playful,
+                    welcoming atmosphere.
+                </p>
+                <p class="outro">A world of fun and flavor awaits you!</p>
+                <div class="button-group">
+                    <a href="~/Register" class="button">Register</a>
+                    <a href="~/Login" class="button button-secondary">Login</a>
+                </div>
+            </div>
+            <div class="hero__image">
+                <img class="mx-auto"
+                     src="~/assets/img/pexels-cottonbro-5959758.jpg"
+                     alt="Bar ambiance" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features | padding-block-900">
+    <h2 class="fs-secondary-heading fw-bold">Three reasons to love Nivo</h2>
+    <div class="even-columns">
+        <div class="feature-card">
+            <div class="counter">1</div>
+            <h3 class="fs-500 fw-bold text-neutral-100">Craft Beverages</h3>
+            <p class="text-neutral-100">
+                Sip on custom coffees, locally sourced craft beers, and themed
+                cocktails that are as creative as our games.
+            </p>
+        </div>
+        <div class="feature-card">
+            <div class="counter">2</div>
+            <h3 class="fs-500 fw-bold text-neutral-100">Board Game Library</h3>
+            <p class="text-neutral-100">
+                Dive into our extensive board game library featuring everything
+                from quick party favorites to epic strategy showdowns.
+            </p>
+        </div>
+        <div class="feature-card">
+            <div class="counter">3</div>
+            <h3 class="fs-500 fw-bold text-neutral-100">Weekly Events</h3>
+            <p class="text-neutral-100">
+                Join a vibrant community through weekly events including themed
+                trivia, cooperative campaigns, tournaments, and social mixers.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="cta | padding-block-900 bg-accent-400 text-neutral-100">
+    <div class="container">
+        <div class="even-columns vertical-align-center-md">
+            <div class="flow">
+                <p class="fs-primary-heading fw-bold">Ready to go next level?</p>
+            </div>
+            <div class="justify-self-end-md">
+                <a href="~/Register" class="button" data-type="inverted">Register</a>
+            </div>
+        </div>
+    </div>
+</section>
