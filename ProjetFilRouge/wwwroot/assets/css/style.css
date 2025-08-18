@@ -23,9 +23,10 @@
   --clr-primary-grad-400: var(--clr-primary-500);
 
   /*Font Variables : ff : font-family; fw : font-weight; fs : font-size*/
+  --ff-primary: "Be Vietnam Pro", Helvetica, sans-serif;
 
-  --font-heading: "Playfair Display", serif;
-  --font-body: "Inter", sans-serif;
+  --ff-body: var(--ff-primary);
+  --ff-heading: var(--ff-primary);
 
   --fw-regular: 400;
   --fw-semi-bold: 500;
