@@ -15,6 +15,7 @@ namespace ProjetFilRouge.Models
 
         [DataType(DataType.Password)]
         [Required(ErrorMessage ="Le champ est obligatoire.")]
+        [StringLength(10, ErrorMessage = "Le mot de passe doit faire un maximum de 10 caractères.")]
         public string? MotDePasse { get; set; }
 
         [Display(Name = "Inscription : ")]
