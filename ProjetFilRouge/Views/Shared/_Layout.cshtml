@@ -23,7 +23,7 @@
             <div class="nav-wrapper">
                 <a href="~/" id="logo">
                     <div id="logo | fw-bold">
-                        NIVO <br /> The Gaming Bar
+                        NIVO - The Gaming Bar
                     </div>
                 </a>
                 <button class="mobile-nav-toggle"
@@ -41,10 +41,14 @@
                 </button>
                 <nav class="primary-navigation" id="primary-navigation">
                     <ul aria-label="Primary" role="list" class="nav-list">
-                        <li><a href="~/">Home</a></li>
+                        <!-- <li><a href="~/">Home</a></li>
                         <li><a href="~/Games">Games</a></li>
                         <li><a href="~/Events">Events</a></li>
-                        <li><a href="~/Contact">Contact</a></li>
+                        <li><a href="~/Contact">Contact</a></li> -->
+                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-controller="Games" asp-action="Index">Games</a></li>
+                        <li><a asp-controller="Events" asp-action="Index">Events</a></li> <!-- page non existante mais possiblement intégrée si j'ai le temps.-->
+                        <li><a asp-controller="Contact" asp-action="Index">Contact</a></li>
                     </ul>
                 </nav>
             </div>
@@ -59,11 +63,11 @@
         <div class="container">
             <nav class="footer-nav">
                 <ul aria-label="Footer" role="list">
-                    <li><a href="~/">Home</a></li>
-                    <li><a href="~/Games">Games</a></li>
-                    <li><a href="~/Events">Events</a></li>
-                    <li><a href="~/Contact">Contact</a></li>
-                    <li><a href="~/Privacy">Privacy Policy</a></li>
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-controller="Games" asp-action="Index">Games</a></li>
+                    <li><a asp-controller="Events" asp-action="Index">Events</a></li> <!-- page non existante mais possiblement intégrée si j'ai le temps.-->
+                    <li><a asp-controller="Contact" asp-action="Index">Contact</a></li>
+                    <li><a asp-controller="Home" asp-action="Privacy">Privacy Policy</a></li>
                 </ul>
             </nav>
         </div>
