@@ -8,14 +8,14 @@
   --clr-accent-100: hsl(24, 100%, 95%);
 
   /* Primary - Rich Navy Blue (backgrounds, header) */
-  --clr-primary-900: hsl(220, 30%, 10%); /* near-black navy */
+  --clr-primary-900: hsl(220, 30%, 10%); 
   --clr-primary-700: hsl(220, 25%, 15%);
-  --clr-primary-500: hsl(220, 20%, 20%); /* base background */
+  --clr-primary-500: hsl(220, 20%, 20%); 
 
   /* Neutral - Soft Browns/Beiges (for text, borders, parchment tones) */
-  --clr-neutral-800: hsl(30, 10%, 30%); /* soft brown for secondary UI */
-  --clr-neutral-400: hsl(30, 15%, 55%); /* beige/neutral text */
-  --clr-neutral-100: hsl(30, 30%, 90%); /* light parchment background */
+  --clr-neutral-800: hsl(30, 10%, 30%); 
+  --clr-neutral-400: hsl(30, 15%, 55%); 
+  --clr-neutral-100: hsl(30, 30%, 90%); 
   --clr-neutral-000: hsl(0, 0%, 100%);
 
   /* Gradient */
