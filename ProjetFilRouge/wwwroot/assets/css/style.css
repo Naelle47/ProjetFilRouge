@@ -1,7 +1,7 @@
 :root {
   /*Colours*/
   /* Accent - Warm Gold/Orange (used for highlights, CTA, tagline) */
-  --clr-accent-500: hsl(24, 80%, 50%); /* deep golden-orange */
+  --clr-accent-500: hsl(24, 80%, 50%); 
   --clr-accent-400: hsl(24, 85%, 60%);
   --clr-accent-350: hsl(24, 88%, 68%);
   --clr-accent-300: hsl(24, 90%, 75%);
