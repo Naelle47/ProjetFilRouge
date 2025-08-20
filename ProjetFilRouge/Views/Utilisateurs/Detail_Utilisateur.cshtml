@@ -1,0 +1,19 @@
+﻿@model ProjetFilRouge.Models.Utilisateur
+
+@{
+    ViewData["Title"] = "Détails de l'utilisateur";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <strong>Nom :</strong> @Model.Nom <br />
+    <strong>Email :</strong> @Model.Email <br />
+    <strong>Date d'inscription :</strong> @Model.DateInscription.ToShortDateString() <br />
+    <strong>Admin :</strong> @(Model.Admin ? "Oui" : "Non")
+</div>
+
+<p>
+    <a href="@Url.Action("Edit", new { id = Model.UtilisateurId })">Modifier</a> |
+    <a href="@Url.Action("Index")">Retour à la liste</a>
+</p>
