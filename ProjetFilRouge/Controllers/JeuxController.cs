@@ -28,7 +28,7 @@ namespace ProjetFilRouge.Controllers
         // afficher le catalogue des jeux
         public IActionResult Index()
         {
-            string query = "Select * from Jeux";
+            string query = "Select * from jeux";
             List<Jeu> jeux;
             using (var connexion = new NpgsqlConnection(_connexionString))
             {
@@ -36,6 +36,9 @@ namespace ProjetFilRouge.Controllers
             }
             return View(jeux);
         }
+
+
+
 
         // afficher le détail d'un jeu -- route paramétrée
         public IActionResult Detail([FromRoute] int id)
