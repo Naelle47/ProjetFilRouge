@@ -2,29 +2,47 @@
 @{
     ViewData["Title"] = "Catalogue des Jeux";
 }
+<main>
+    <section>
+        <h1 class="fs-primary-heading text-center">Catalogue des Jeux</h1>
+        <div class="even-columns">
+           
 
-<div>
-    <h1>Catalogue des Jeux</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Titre</th>
-                <th>Description</th>
-                <th>Date d'ajout</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (Jeu jeu in @Model!)
-            {
-                <tr>
-                    <td>@(jeu.JeuId)</td>
-                    <td>@(jeu.Titre)</td>
-                    <td>@(jeu.Description)</td>
-                    <td>@(jeu.DateAjout)</td>
-                    <td><a asp-controller="Jeux" asp-action="Detail" asp-route-id="@(jeu.JeuId)">Détails</a></td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div> 
+            @* <p class="text-center">Nombre de jeux trouvés : <strong>@Model?.Count</strong></p> *@
+
+            <div class="game-card">
+                @foreach (var jeu in Model)
+                {
+
+                    <div class="card h-100 shadow-sm">
+                        @if (!string.IsNullOrEmpty(jeu.Image))
+                        {
+                            <img src="@jeu.Image" class="card-img-top" alt="@jeu.Titre" />
+                        }
+                        else
+                        {
+                            <img src="~/assets/img/no-image.png" class="card-img-top" alt="Pas d'image disponible" />
+                        }
+
+                        <div class="card-body">
+                            <h5 class="card-title">@jeu.Titre</h5>
+                            <p class="card-text">@jeu.Description</p>
+
+                            <ul class="list-unstyled mb-3">
+                                <li><strong>Joueurs :</strong> @jeu.NombreJoueursRecommandes</li>
+                                <li><strong>Durée :</strong> @jeu.TempsJeuMoyen min</li>
+                                <li><strong>Ajouté le :</strong> @(jeu.DateAjout.ToString("dd/MM/yyyy") ?? "—")</li>
+                            </ul>
+
+                            <a asp-controller="Jeux" asp-action="Detail" asp-route-id="@jeu.JeuId" class="button">
+                                Voir détails
+                            </a>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </section>
+</main>
+

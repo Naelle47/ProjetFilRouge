@@ -14,7 +14,11 @@ namespace ProjetFilRouge.Models
         public string? Description { get; set; }
 
         public string? Image { get; set; }
+
+        [Display(Name ="Joueurs")]
         public int NombreJoueursRecommandes { get; set; }
+
+        [Display(Name ="Durée")]
         public int TempsJeuMoyen { get; set; }
 
         [Display(Name ="Ajouté le : ")]
@@ -23,7 +27,9 @@ namespace ProjetFilRouge.Models
 
         // relations 
         public List<Commentaire> Commentaires { get; set; } = new List<Commentaire>();
+
         public List<Categorie> Categories { get; set; } = new List<Categorie>();
+
         public List<Theme> Themes { get; set; } = new List<Theme>();
     }
 }
