@@ -643,6 +643,12 @@ a {
     }
 }
 /* ====== GAMES ====== */
+.game-card {
+    background-color: var(--clr-primary-500);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-inline: 1.25rem;
+}
 
 
 
