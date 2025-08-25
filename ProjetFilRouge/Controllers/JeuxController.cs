@@ -38,7 +38,7 @@ namespace ProjetFilRouge.Controllers
                 TempsJeuMoyen, 
                 DateAjout
             FROM Jeux
-            ORDER BY Titre";
+            ORDER BY ""JeuId""";
             List<Jeu> jeux;
             using (var connexion = new NpgsqlConnection(_connexionString))
             {
