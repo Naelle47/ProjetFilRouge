@@ -10,246 +10,65 @@
         </h1>
         <div class="container">
             <div class="even-columns">
-                <div class="game-card">
-                    <a asp-controller="Jeux" asp-action="Detail" asp-route-id="" class="card-btn" alt="Voir détails du jeu">
-                        <span class="material-icons">arrow_forward</span>
-                        <span class="btn-text">Voir détail</span>
-                    </a>
-                    <div class="card-img">
-                        <img src="~/pfr_images/jeux/pandemic.jpg" alt="vignette du Jeu" />
-                    </div>
-                    <div class="card-body">
-                        <h3 class="card-title">Pandemic</h3>
-                        <div class="card-text">
-                            <p>
-                                Dans Pandemic, sauvez la planète avant que les épidémies ne
-                                prennent le dessus ! Un très bon jeu de coopération,
-                                équilibré et bien pensé niveau gameplay. Un super jeu qui
-                                mérite bien ses récompenses.
-                            </p>
-                            <ul>
-                                <li><strong>Joueurs : 4</strong></li> //problème pour l'insertion des données en dynamique
-                                <li><strong>Durée : 12 </strong></li>
-                                <li><strong>Ajouté le : 12/07/2025 </strong></li>
-                            </ul>
+                @foreach (var jeu in Model)
+                {
+                    <div class="game-card">
+                        <a asp-controller="Jeux"
+                           asp-action="Detail"
+                           asp-route-id="@jeu.JeuId"
+                           class="card-btn"
+                           title="Voir détails du jeu">
+                            <span class="material-icons">arrow_forward</span>
+                            <span class="btn-text">Voir détail</span>
+                        </a>
+                        <div class="card-img">
+                            <img src="@jeu.Image" alt="vignette du jeu @jeu.Titre" />
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">@jeu.Titre</h3>
+                            <div class="card-text">
+                                <p>@jeu.Description</p>
+                                <ul>
+                                    <li><strong>Joueurs :</strong> @jeu.NombreJoueursRecommandes</li>
+                                    <li><strong>Durée :</strong> @jeu.TempsJeuMoyen</li>
+                                    <li><strong>Ajouté le :</strong> @jeu.DateAjout.ToString("dd/MM/yyyy")</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- end card : game 1 -->
-                <div class="game-card">
-                    <a href="#" class="card-btn">
-                        <span class="material-icons">arrow_forward</span>
-                        <span class="btn-text">Voir détail</span>
-                    </a>
-                    <div class="card-img">
-                        <img src="" alt="" />
-                    </div>
-                    <div class="card-body">
-                        <h3 class="card-title">Game Title</h3>
-                        <div class="card-text">
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                Curabitur magna risus, aliquam vitae sem at, facilisis
-                                gravida ex. Sed luctus, urna eu placerat ullamcorper, ex
-                                urna luctus velit, sit amet aliquet dui mi ac erat.
-                            </p>
-                            <ul>
-                                <li><strong>Joueurs : </strong></li>
-                                <li><strong>Durée :</strong></li>
-                                <li><strong>Ajouté le :</strong></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card : game 2 -->
-                <div class="game-card">
-                    <a href="#" class="card-btn">
-                        <span class="material-icons">arrow_forward</span>
-                        <span class="btn-text">Voir détail</span>
-                    </a>
-                    <div class="card-img">
-                        <img src="" alt="" />
-                    </div>
-                    <div class="card-body">
-                        <h3 class="card-title">Game Title</h3>
-                        <div class="card-text">
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                Curabitur magna risus, aliquam vitae sem at, facilisis
-                                gravida ex. Sed luctus, urna eu placerat ullamcorper, ex
-                                urna luctus velit, sit amet aliquet dui mi ac erat.
-                            </p>
-                            <ul>
-                                <li><strong>Joueurs : </strong></li>
-                                <li><strong>Durée :</strong></li>
-                                <li><strong>Ajouté le :</strong></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card : game 3 -->
-                <div class="game-card">
-                    <a href="#" class="card-btn">
-                        <span class="material-icons">arrow_forward</span>
-                        <span class="btn-text">Voir détail</span>
-                    </a>
-                    <div class="card-img">
-                        <img src="" alt="" />
-                    </div>
-                    <div class="card-body">
-                        <h3 class="card-title">Game Title</h3>
-                        <div class="card-text">
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                Curabitur magna risus, aliquam vitae sem at, facilisis
-                                gravida ex. Sed luctus, urna eu placerat ullamcorper, ex
-                                urna luctus velit, sit amet aliquet dui mi ac erat.
-                            </p>
-                            <ul>
-                                <li><strong>Joueurs : </strong></li>
-                                <li><strong>Durée :</strong></li>
-                                <li><strong>Ajouté le :</strong></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card : game 4 -->
-                <div class="game-card">
-                    <a href="#" class="card-btn">
-                        <span class="material-icons">arrow_forward</span>
-                        <span class="btn-text">Voir détail</span>
-                    </a>
-                    <div class="card-img">
-                        <img src="" alt="" />
-                    </div>
-                    <div class="card-body">
-                        <h3 class="card-title">Game Title</h3>
-                        <div class="card-text">
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                Curabitur magna risus, aliquam vitae sem at, facilisis
-                                gravida ex. Sed luctus, urna eu placerat ullamcorper, ex
-                                urna luctus velit, sit amet aliquet dui mi ac erat.
-                            </p>
-                            <ul>
-                                <li><strong>Joueurs : </strong></li>
-                                <li><strong>Durée :</strong></li>
-                                <li><strong>Ajouté le :</strong></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card : game 5 -->
-                <div class="game-card">
-                    <a href="#" class="card-btn">
-                        <span class="material-icons">arrow_forward</span>
-                        <span class="btn-text">Voir détail</span>
-                    </a>
-                    <div class="card-img">
-                        <img src="" alt="" />
-                    </div>
-                    <div class="card-body">
-                        <h3 class="card-title">Game Title</h3>
-                        <div class="card-text">
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                Curabitur magna risus, aliquam vitae sem at, facilisis
-                                gravida ex. Sed luctus, urna eu placerat ullamcorper, ex
-                                urna luctus velit, sit amet aliquet dui mi ac erat.
-                            </p>
-                            <ul>
-                                <li><strong>Joueurs : </strong></li>
-                                <li><strong>Durée :</strong></li>
-                                <li><strong>Ajouté le :</strong></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card : game 6 -->
-                <div class="game-card">
-                    <a href="#" class="card-btn">
-                        <span class="material-icons">arrow_forward</span>
-                        <span class="btn-text">Voir détail</span>
-                    </a>
-                    <div class="card-img">
-                        <img src="" alt="" />
-                    </div>
-                    <div class="card-body">
-                        <h3 class="card-title">Game Title</h3>
-                        <div class="card-text">
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                Curabitur magna risus, aliquam vitae sem at, facilisis
-                                gravida ex. Sed luctus, urna eu placerat ullamcorper, ex
-                                urna luctus velit, sit amet aliquet dui mi ac erat.
-                            </p>
-                            <ul>
-                                <li><strong>Joueurs : </strong></li>
-                                <li><strong>Durée :</strong></li>
-                                <li><strong>Ajouté le :</strong></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card : game 7 -->
-                <div class="game-card">
-                    <a href="#" class="card-btn">
-                        <span class="material-icons">arrow_forward</span>
-                        <span class="btn-text">Voir détail</span>
-                    </a>
-                    <div class="card-img">
-                        <img src="" alt="" />
-                    </div>
-                    <div class="card-body">
-                        <h3 class="card-title">Game Title</h3>
-                        <div class="card-text">
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                Curabitur magna risus, aliquam vitae sem at, facilisis
-                                gravida ex. Sed luctus, urna eu placerat ullamcorper, ex
-                                urna luctus velit, sit amet aliquet dui mi ac erat.
-                            </p>
-                            <ul>
-                                <li><strong>Joueurs : </strong></li>
-                                <li><strong>Durée :</strong></li>
-                                <li><strong>Ajouté le :</strong></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card : game 8 -->
-                <div class="game-card">
-                    <a href="#" class="card-btn">
-                        <span class="material-icons">arrow_forward</span>
-                        <span class="btn-text">Voir détail</span>
-                    </a>
-                    <div class="card-img">
-                        <img src="" alt="" />
-                    </div>
-                    <div class="card-body">
-                        <h3 class="card-title">Game Title</h3>
-                        <div class="card-text">
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                Curabitur magna risus, aliquam vitae sem at, facilisis
-                                gravida ex. Sed luctus, urna eu placerat ullamcorper, ex
-                                urna luctus velit, sit amet aliquet dui mi ac erat.
-                            </p>
-                            <ul>
-                                <li><strong>Joueurs : </strong></li>
-                                <li><strong>Durée :</strong></li>
-                                <li><strong>Ajouté le :</strong></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card : game 9 -->
+                }
             </div>
             <div class="pagination">
                 <button class="page-btn prev button" disabled>Previous</button>
                 <div class="page-numbers"></div>
                 <button class="page-btn next button">Next</button>
             </div>
+        </div>
+    </section>
+    <section>
+        <div class="container">
+           <div class="even-columns">
+                <div><h2 class="fs-secondary-heading margin-top-900">Soumettre un jeu</h2>
+                    <p>
+                        Lorem ipsum dolor ...
+                    </p>
+                    </div>
+                <div class="form-content">
+                    <!-- Espace pour le Form -->
+                </div>
+           </div>
+        </div>
+    </section>
+    <section class="cta | padding-block-700 bg-accent-400 text-neutral-100" ">
+        <div class="container">
+            <div class="even-columns vertical-align-center-md">
+                <div class="flow">
+                    <p class="fs-primary-heading fw-bold">Take part in the next big event !</p>
+                </div>
+                <div class="justify-self-end-md">
+                    <a href="~/Register" class="button" data-type="inverted">Register</a>
+                </div>
+                </div>
         </div>
     </section>
 </main>
