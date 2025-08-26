@@ -1,9 +1,22 @@
 ﻿@model Jeu// la vue s'attend à recevoir le détail d'un jeu
-<h1>Detail du jeu</h1>
+<h1>Détail du jeu</h1>
 <div>
     <p>ID: @Model.JeuId </p>
     <p>Titre: @Model.Titre </p>
     <p>Description: @Model.Description </p>
     <p>Date d'ajout: @Model.DateAjout </p>
+
+<div class="button-group">
+        <a asp-controller="Jeux" asp-action="Index" class="button" title="Retour au catalogue">
+            <span class="material-icons">arrow_back</span>
+        </a>
+        <a asp-action="Edit" asp-route-id="@Model.JeuId" class="button button-secondary">Edit</a>
+        <form asp-action="Delete" asp-route-id="@Model.JeuId" method="post" onsubmit="return confirm(" Voulez-vous vraiment supprimer ce jeu?");>
+            <button type="submit" class="button button-secondary">Delete</button>
+        </form>
+</div>
+
     <img src="@Model.Image"  alt="image du jeu"/>
+    
+
 </div>
