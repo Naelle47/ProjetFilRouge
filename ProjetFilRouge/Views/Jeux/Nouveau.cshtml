@@ -1,6 +1,13 @@
 ﻿@model Jeu
 
+@if (ViewData.ContainsKey("ValidateMessage"))
+{
+	<p>@ViewData["ValidateMessage"]</p>
+}
+
 <h1>Nouveau Jeu</h1>
+<form asp-action="Nouveau" method="post">
+	@Html.AntiForgeryToken()
 <div>
 	<div class="form-content">
 		<label asp-for=" @Model.Titre"></label>
@@ -29,6 +36,7 @@
 	</div>
 	<input type="submit" value="Envoyer">
 </div>
+</form>
 
 		@section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -92,5 +92,26 @@ namespace ProjetFilRouge.Controllers
         }
 
 
+        // Formulaire pour l'ajout d'un nouveau Jeu.
+        [HttpPost]
+        public IActionResult Nouveau([FromForm] Jeu jeu)
+        {
+            string query = @"INSERT INTO jeux (titre, description, nombrejoueursrecommandes, tempsjeumoyen, dateajout) VALUES (@Titre,@Description,@NombreJoueursRecommandes,@TempsJeuMoyen,@DateAjout)";
+            int res;
+            using (var connexion = new NpgsqlConnection(_connexionString))
+            {
+                res = connexion.Execute(query, jeu);
+            }
+            if(res !=0)
+            {
+                ViewData["ValidateMessage"] = "Jeu bien créé !";
+            }
+            else
+            {
+                ViewData["ValidateMessage"] = "Erreur";
+            }
+            return View();
+        }
+
     }
 }
