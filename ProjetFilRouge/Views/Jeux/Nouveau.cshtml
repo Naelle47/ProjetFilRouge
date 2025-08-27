@@ -11,22 +11,22 @@
 <div>
 	<div class="form-content">
 		<label asp-for=" @Model.Titre"></label>
-		<input asp-for="@Model.Titre" />
+		<input asp-for="@Model.Titre" placeholder="Nom du Jeu"/>
 		<span asp-validation-for="@Model.Titre" class="text-danger"></span>
 	</div>
 	<div class="form-content">
 		<label asp-for="@Model.Description"></label>
-		<input asp-for="@Model.Description" />
+		<textarea asp-for="@Model.Description" rows="4" placeholder="Écrivez une description du jeu..."></textarea>
 		<span asp-validation-for="@Model.Description" class="text-danger"></span>
 	</div>
 	<div class="form-content">
 		<label asp-for="@Model.NombreJoueursRecommandes"></label>
-		<input asp-for="@Model.NombreJoueursRecommandes" />
+		<input asp-for="@Model.NombreJoueursRecommandes" placeholder="Nombre de joueurs max." />
 		<span asp-validation-for="@Model.NombreJoueursRecommandes" class="text-danger"></span>
 	</div>
 	<div class="form-content">
 		<label asp-for="@Model.TempsJeuMoyen"></label>
-		<input asp-for="@Model.TempsJeuMoyen" />
+		<input asp-for="@Model.TempsJeuMoyen" placeholder="Durée en minutes"/>
 		<span asp-validation-for="@Model.TempsJeuMoyen" class="text-danger"></span>
 	</div>
 	<div class="form-content">
