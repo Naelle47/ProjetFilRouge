@@ -33,11 +33,11 @@
                                     <li><strong>Durée :</strong> @jeu.TempsJeuMoyen</li>
                                     <li><strong>Ajouté le :</strong> @jeu.DateAjout.ToString("dd/MM/yyyy")</li>
                                 </ul> -->
-                                <p class="badge" 
+                                <span class="badge" 
                                    style="display: inline-block; background-color: var(--clr-primary-500); color: var(--clr-accent-400);
                                    padding: 0.25rem 0.6rem; border-radius:999px; margin-top:0.5rem;">
                                    @jeu.Categories?
-                                   </p>
+                                   </span>
                             </div>
                         </div>
                     </div>
@@ -47,6 +47,9 @@
                 <button class="page-btn prev button" disabled>Previous</button>
                 <div class="page-numbers"></div>
                 <button class="page-btn next button">Next</button> </div> -->
+
+            <span class="button">Load More</span>
+
             </div>
         
     </section>
@@ -72,7 +75,7 @@
                     <p class="fs-primary-heading fw-bold">Take part in the next big event !</p>
                 </div>
                 <div class="justify-self-end-md">
-                    <a href="~/Register" class="button" data-type="inverted">Register</a>
+                    <span class="button" data-type="inverted">Register</span>
                 </div>
                 </div>
         </div>
