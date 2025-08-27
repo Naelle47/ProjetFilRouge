@@ -4,7 +4,7 @@ using Npgsql;
 using ProjetFilRouge.Models;
 namespace ProjetFilRouge.Controllers
 {
-    public class JeuxController : Controller 
+    public class JeuxController : Controller
     {
         // attribut stockant la chaîne de connexion à la base de données
         private readonly string _connexionString;
@@ -74,7 +74,7 @@ namespace ProjetFilRouge.Controllers
             {
                 try
                 {
-                    jeu = connexion.QuerySingle<Jeu>(query, new {identifiant = id}); // {identifiant = id} -> objet anonyme entre accolades.
+                    jeu = connexion.QuerySingle<Jeu>(query, new { identifiant = id }); // {identifiant = id} -> objet anonyme entre accolades.
                 }
                 catch (SystemException)
                 {
@@ -84,42 +84,13 @@ namespace ProjetFilRouge.Controllers
             return View(jeu);
         }
 
-        [HttpPost]
-        public IActionResult Create(EditeurJeuxViewModel model)
+
+        [HttpGet]
+        public IActionResult Nouveau()
         {
-            if (!ModelState.IsValid)
-            {
-                // Si le formulaire n'est pas valide, recharge la liste des jeux
-                string query = @"
-            SELECT 
-                jeuid_pk AS ""JeuId"",
-                Titre,
-                Description,
-                Image,
-                NombreJoueursRecommandes,
-                TempsJeuMoyen,
-                DateAjout
-            FROM Jeux
-            ORDER BY Titre";
-
-                using (var connexion = new NpgsqlConnection(_connexionString))
-                {
-                    model.Jeux = connexion.Query<Jeu>(query).ToList();
-                }
-
-                return View("Index", model);
-            }
-
-            string insertQuery = @"
-        INSERT INTO Jeux (Titre, TempsJeuMoyen, NombreJoueursRecommandes, Categorie, DateSortie)
-        VALUES (@Titre, @TempsJeuMoyen, @NombreJoueursRecommandes, @Categorie, @DateSortie)";
-
-            using (var connexion = new NpgsqlConnection(_connexionString))
-            {
-                connexion.Execute(insertQuery, model);
-            }
-
-            return RedirectToAction("Index");
+            return View();
         }
+
+
     }
 }

@@ -28,11 +28,16 @@
                             <h3 class="card-title">@jeu.Titre</h3>
                             <div class="card-text">
                                 <p>@jeu.Description</p>
-                                <ul>
+                                <!-- <ul>
                                     <li><strong>Joueurs :</strong> @jeu.NombreJoueursRecommandes</li>
                                     <li><strong>Durée :</strong> @jeu.TempsJeuMoyen</li>
                                     <li><strong>Ajouté le :</strong> @jeu.DateAjout.ToString("dd/MM/yyyy")</li>
-                                </ul>
+                                </ul> -->
+                                <p class="badge" 
+                                   style="display: inline-block; background-color: var(--clr-primary-500); color: var(--clr-accent-400);
+                                   padding: 0.25rem 0.6rem; border-radius:999px; margin-top:0.5rem;">
+                                   @jeu.Categories?
+                                   </p>
                             </div>
                         </div>
                     </div>
@@ -55,6 +60,7 @@
                     </div>
                 <div class="form-content">
                     <!-- Espace pour le Form -->
+
                 </div>
            </div>
         </div>
