@@ -26,6 +26,8 @@ namespace ProjetFilRouge.Models
         public DateTime DateAjout { get; set; }
 
         // relations 
+        public IFormFile ImageFile { get; set; }
+
         public List<Commentaire> Commentaires { get; set; } = new List<Commentaire>();
 
         public List<Categorie> Categories { get; set; } = new List<Categorie>();
