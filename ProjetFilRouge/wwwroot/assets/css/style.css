@@ -643,6 +643,11 @@ a {
     }
 }
 /* ====== GAMES GALLERY ====== */
+.gallery-grid{
+    display: grid;
+    gap: 1rem;
+    grid-template-columns : repeat(minmax(220px, 1fr));
+}
 .game-gallery {
     background-color: var(--clr-primary-700);
 }

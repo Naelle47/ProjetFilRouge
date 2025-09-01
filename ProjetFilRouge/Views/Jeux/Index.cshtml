@@ -10,38 +10,42 @@
         </h1>
         <div class="container">
             <div class="even-columns">
-                @foreach (var jeu in Model)
-                {
-                    <div class="game-card">
-                        <a asp-controller="Jeux"
-                           asp-action="Detail"
-                           asp-route-id="@jeu.JeuId"
-                           class="card-btn"
-                           title="Voir détails du jeu">
-                            <span class="material-icons">arrow_forward</span>
-                            <span class="btn-text">Voir détail</span>
-                        </a>
-                        <div class="card-img">
-                            <img src="@jeu.Image" alt="vignette du jeu @jeu.Titre" />
-                        </div>
-                        <div class="card-body">
-                            <h3 class="card-title">@jeu.Titre</h3>
-                            <div class="card-text">
-                                <p>@jeu.Description</p>
-                                <!-- <ul>
-                                    <li><strong>Joueurs :</strong> @jeu.NombreJoueursRecommandes</li>
-                                    <li><strong>Durée :</strong> @jeu.TempsJeuMoyen</li>
-                                    <li><strong>Ajouté le :</strong> @jeu.DateAjout.ToString("dd/MM/yyyy")</li>
-                                </ul> -->
-                                <span class="badge" 
-                                   style="display: inline-block; background-color: var(--clr-primary-500); color: var(--clr-accent-400);
-                                   padding: 0.25rem 0.6rem; border-radius:999px; margin-top:0.5rem;">
-                                   @jeu.Categories?
-                                   </span>
+                <!-- TODO : ajouter un container et une nouvelle grille pour les jeux -->
+                <div class="gallery-grid">
+                    @foreach (var jeu in Model)
+                    {
+                        <div class="game-card">
+                            <a asp-controller="Jeux"
+                               asp-action="Detail"
+                               asp-route-id="@jeu.JeuId"
+                               class="card-btn"
+                               title="Voir détails du jeu">
+                                <span class="material-icons">arrow_forward</span>
+                                <span class="btn-text">Voir détail</span>
+                            </a>
+                            <div class="card-img">
+                                <img src="@jeu.Image" alt="vignette du jeu @jeu.Titre" />
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title">@jeu.Titre</h3>
+                                <div class="card-text">
+                                    <p>@jeu.Description</p>
+                                    <!-- <ul>
+                                        <li><strong>Joueurs :</strong> @jeu.NombreJoueursRecommandes</li>
+                                        <li><strong>Durée :</strong> @jeu.TempsJeuMoyen</li>
+                                        <li><strong>Ajouté le :</strong> @jeu.DateAjout.ToString("dd/MM/yyyy")</li>
+                                    </ul> -->
+                                    <span class="badge"
+                                          style="display: inline-block; background-color: var(--clr-primary-500); color: var(--clr-accent-400);
+                                       padding: 0.25rem 0.6rem; border-radius:999px; margin-top:0.5rem;">
+                                        @jeu.Categories?
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
+                    }
+                </div>
+               
             </div>
             <!-- <div class="pagination">
                 <button class="page-btn prev button" disabled>Previous</button>
