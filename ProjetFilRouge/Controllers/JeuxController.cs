@@ -18,7 +18,7 @@ namespace ProjetFilRouge.Controllers
         {
             // récupération de la chaîne de connexion dans la configuration
             _connexionString = configuration.GetConnectionString("GestionCatalogue")!;
-            // si la chaîne de connexionn'a pas été trouvé => déclenche une exception => code http 500 retourné
+            // si la chaîne de connexion'a pas été trouvé => déclenche une exception => code http 500 retourné
             if (_connexionString == null)
             {
                 throw new Exception("Error : Connexion string not found ! ");
