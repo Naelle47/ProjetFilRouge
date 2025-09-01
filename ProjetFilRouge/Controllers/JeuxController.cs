@@ -119,7 +119,7 @@ namespace ProjetFilRouge.Controllers
 
 
                 // On regarde si une image a été uploadée, si oui, on vérifie sa viabilité, sinon osef.
-                // On récupière le fichier image, on pointe sur son nom dans l'arborescence exploreur et on vérifie que l'extension est valide.
+                // On récupère le fichier image, on pointe sur son nom dans l'arborescence exploreur et on vérifie que l'extension est valide.
 
                 if (jeu.ImageFile != null || jeu.ImageFile.Length != 0) // Fichier null ou taille zéro = osef, sinon...
                 {
@@ -136,7 +136,7 @@ namespace ProjetFilRouge.Controllers
                     throw new Exception("Ton message d'erreur pour fichier invalide");
                 }
 
-                // On génère l'URL puisl le chemin absolu de stockage randomisée pour le fichier image à insérer dans la base de données.
+                // On génère l'URL puis le chemin absolu de stockage randomisée pour le fichier image à insérer dans la base de données.
 
                 string cheminRacine = "/pfr_images/jeux/";
                 string titreRandomise = Path.GetFileNameWithoutExtension(Path.GetRandomFileName()) + Path.GetExtension((jeu.ImageFile).FileName);
@@ -144,7 +144,7 @@ namespace ProjetFilRouge.Controllers
                 string cheminAbsolu = "wwwroot" + cheminRelatif;
                 cheminAbsoluMem = cheminAbsolu;
 
-                // On vérifie que le fichier de stockage existe, important si plus tard chaque jeu recçoit un sous-fichier.
+                // On vérifie que le fichier de stockage existe, important si plus tard chaque jeu reçoit un sous-fichier.
 
                 Directory.CreateDirectory(Path.GetDirectoryName(cheminAbsolu)!);
 
