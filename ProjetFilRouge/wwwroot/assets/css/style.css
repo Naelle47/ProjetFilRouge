@@ -612,9 +612,9 @@ a {
     color: var(--clr-primary-900);
 }
 
-    .accordion-header:hover {
-        background: var(--clr-accent-300);
-    }
+.accordion-header:hover {
+    background: var(--clr-accent-300);
+}
 
 .accordion-content {
     padding: 20px;
@@ -643,14 +643,28 @@ a {
     }
 }
 /* ====== GAMES GALLERY ====== */
-.gallery-grid{
+.gallery-grid {
     display: grid;
-    gap: 1rem;
-    grid-template-columns : repeat(minmax(220px, 1fr));
+    gap: 1.5rem;
+    grid-template-columns: 1fr; /* mobile: 1 column */
+    align-items: stretch;
+}
+
+@media (min-width: 40em) {
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr); /* tablet: 2 columns */
+    }
+}
+
+@media (min-width: 60em) {
+    .gallery-grid {
+        grid-template-columns: repeat(3, 1fr); /* desktop: 3 columns */
+    }
 }
 .game-gallery {
     background-color: var(--clr-primary-700);
 }
+
 
 .game-card {
     background-color: var(--clr-neutral-000);
