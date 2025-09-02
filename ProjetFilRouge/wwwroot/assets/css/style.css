@@ -670,6 +670,7 @@ a {
     background-color: var(--clr-neutral-000);
     border: 0.18rem solid var(--clr-accent-400);
     border-radius: 0.75rem;
+    height: 480px;
     padding: 3rem;
     margin-inline: 1rem;
     position: relative;

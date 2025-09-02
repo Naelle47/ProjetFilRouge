@@ -10,7 +10,7 @@
         </h1>
         <div class="container">
             <div class="even-columns">
-                <!-- TODO : ajouter un container et une nouvelle grille pour les jeux -->
+                <!-- TODO : ajouter une grille imbriquée pour les jeux -->
                 <div class="gallery-grid">
                     @foreach (var jeu in Model)
                     {
@@ -35,9 +35,7 @@
                                         <li><strong>Durée :</strong> @jeu.TempsJeuMoyen</li>
                                         <li><strong>Ajouté le :</strong> @jeu.DateAjout.ToString("dd/MM/yyyy")</li>
                                     </ul> -->
-                                    <span class="badge"
-                                          style="display: inline-block; background-color: var(--clr-primary-500); color: var(--clr-accent-400);
-                                       padding: 0.25rem 0.6rem; border-radius:999px; margin-top:0.5rem;">
+                                    <span class="badge">
                                         @jeu.Categories?
                                     </span>
                                 </div>
