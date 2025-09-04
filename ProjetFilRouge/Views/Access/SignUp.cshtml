@@ -1,0 +1,20 @@
+﻿@model Utilisateur
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<!-- TO DO : Ajouter la classe "visually-hidden" sur les Label -->
+<!-- TO DO : Ajouter le champ de confirmation de MDP et vérifier qu'ils sont identiques -->
+<!-- TO DO : Ajouter le champ de Pseudo -->
+
+<form asp-controller="Access" asp-action="SignUp" method="post">
+    <label asp-for="@Model.Email"></label>
+    <input asp-for="@Model.Email" />
+
+    <label asp-for="@Model.MotDePasse"></label>
+    <input asp-for="@Model.MotDePasse" />
+
+    <input type="submit" value="S'inscrire" />
+    </form>

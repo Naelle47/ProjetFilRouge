@@ -4,7 +4,8 @@
 {
 	<p>@ViewData["ValidateMessage"]</p>
 }
-
+<!-- TO DO : Remodeler le formulaire. Esthétique moderne (label visually-hidden but still accessible for screen-readers-->
+<!-- TO DO : Changer le HTML HELPER pour un TAGHELPER > ANTIFORGERYTOKEN -->
 <h1>Nouveau Jeu</h1>
 <form asp-action="Nouveau" method="post" enctype="multipart/form-data">
 	@Html.AntiForgeryToken()

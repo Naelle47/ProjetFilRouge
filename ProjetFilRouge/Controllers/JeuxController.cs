@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Dapper;
+﻿using Dapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using ProjetFilRouge.Models;
 namespace ProjetFilRouge.Controllers
 {
+    [Authorize]
     public class JeuxController : Controller
     {
         // attribut stockant la chaîne de connexion à la base de données
