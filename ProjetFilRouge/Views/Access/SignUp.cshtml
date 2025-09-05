@@ -9,12 +9,33 @@
 <!-- TO DO : Ajouter le champ de confirmation de MDP et vérifier qu'ils sont identiques -->
 <!-- TO DO : Ajouter le champ de Pseudo -->
 
-<form asp-controller="Access" asp-action="SignUp" method="post">
-    <label asp-for="@Model.Email"></label>
-    <input asp-for="@Model.Email" />
 
-    <label asp-for="@Model.MotDePasse"></label>
-    <input asp-for="@Model.MotDePasse" />
+<form asp-action="SignUp" method="post">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <input type="submit" value="S'inscrire" />
-    </form>
+    <div class="form-group">
+        <label asp-for="Nom"></label>
+        <input asp-for="Nom" placeholder="Username" />
+        <span asp-validation-for="Nom" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" placeholder="Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="MotDePasse"></label>
+        <input asp-for="MotDePasse" placeholder="Password" />
+        <span asp-validation-for="MotDePasse" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="button">SignUp</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

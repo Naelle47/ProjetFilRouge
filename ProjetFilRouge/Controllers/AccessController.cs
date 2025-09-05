@@ -47,6 +47,11 @@ namespace ProjetFilRouge.Controllers
         public IActionResult SignUp([FromForm] Utilisateur utilisateur)
         {
             // TODO : Valider le modèle
+            if (!ModelState.IsValid)
+            {
+                // Retourne la vue SignUp avec le modèle et les erreurs
+                return View(utilisateur);
+            }
 
             string query = "INSERT INTO Utilisateurs (nom, email, motdepasse,verificationtoken) VALUES (@nom, @email, @motdepasse,@verificationtoken)";
 
@@ -60,10 +65,12 @@ namespace ProjetFilRouge.Controllers
             {
                 using (var connexion = new NpgsqlConnection(_connexionString))
                 {
+                    connexion.Open();
                     int res = connexion.Execute(query, new
                     {
+                        nom = utilisateur.Nom,
                         email = utilisateur.Email,
-                        password = motDePasseHache,
+                        motdepasse = motDePasseHache,
                         verificationtoken = token,
                     });
                     if (res != 1)
@@ -87,7 +94,7 @@ namespace ProjetFilRouge.Controllers
 
                         using (var smtp = new SmtpClient("localhost", 587))
                         {
-                            smtp.Credentials = new NetworkCredential("app@nivo.fr", "mot de passe");
+                            smtp.Credentials = new NetworkCredential("app@nivo.fr", "fromage");
                             smtp.EnableSsl = false; // devrait être à true mais l'environnement de test ne le permet pas
                             smtp.Send(mail);
                         }
@@ -143,6 +150,12 @@ namespace ProjetFilRouge.Controllers
         [HttpPost]
         public async Task<IActionResult> SignIn([FromForm] Utilisateur utilisateur)
         {
+            // TODO : Valider le modèle
+            if (!ModelState.IsValid)
+            {
+                // Retourne la vue SignIn avec le modèle et les erreurs
+                return View(utilisateur);
+            }
             // TODO : Vérifier le modèle
             string query = "SELECT * from Utilisateurs WHERE email=@email AND emailverified=true";
 
@@ -195,7 +208,7 @@ namespace ProjetFilRouge.Controllers
             }
         }
 
-        public async Task<IActionResult> SignOut()
+        public async Task<IActionResult> LogOut()
         {
             // vous aurez besoin de modifier le type de retour de votre méthode en Task<IActionResult> (programmation asynchrone étudiée plus tard dans la formation)
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

@@ -1,0 +1,93 @@
+﻿@model dynamic
+@{
+    ViewData["Title"] = "Login/Register - Nivo";
+    Layout = "_Layout";
+
+    // Determine which tab should be active
+    var activeForm = ViewData["ActiveForm"] as string ?? "SignIn";
+}
+
+<section class="authentification | padding-block-900">
+    <div class="container">
+        <div class="auth-box even-columns" id="auth-container">
+            <!-- LEFT PANEL -->
+            <div class="left-panel">
+                <h1 class="fs-primary-heading">Hello!</h1>
+                <p>
+                    Welcome to our brand new website. To view our content, you need
+                    to create an account using the Sign Up form, or log in with your account.
+                </p>
+
+                <div class="switch-btns">
+                    <button class="@(activeForm == "SignIn" ? "active" : "")" id="loginBtn">SignIn</button>
+                    <button class="@(activeForm == "SignUp" ? "active" : "")" id="signupBtn">Sign Up</button>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL -->
+            <div class="right-panel">
+                <!-- LOGIN FORM -->
+                <div class="form login-form @(activeForm == "SignIn" ? "active" : "")" id="formlogin">
+                    <form asp-action="SignIn" asp-controller="Access" method="post">
+                        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+                        <div asp-validation-summary="All" class="error-message"></div>
+
+                        <input type="email" name="Email" placeholder="Email" required value="@Request.Form["Email"]" />
+                        <input type="password" name="Password" placeholder="Password" required />
+
+                        <button type="submit">Login</button>
+                        <div class="social-login">
+                            <button type="button">Google</button>
+                            <button type="button">Facebook</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- SIGNUP FORM -->
+                <div class="form signup-form @(activeForm == "SignUp" ? "active" : "")" id="formsignup">
+                    <form asp-action="SignUp" asp-controller="Access" method="post">
+                        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+                        <div asp-validation-summary="All" class="error-message"></div>
+
+                        <input type="text" name="Username" placeholder="Username" required value="@Request.Form["Username"]" />
+                        <input type="email" name="Email" placeholder="Email" required value="@Request.Form["Email"]" />
+                        <input type="password" name="Password" placeholder="Password" required />
+                        <input type="password" name="ConfirmPassword" placeholder="Confirm Password" required />
+
+                        <button type="submit">Sign Up</button>
+                        <div class="social-login">
+                            <button type="button">Google</button>
+                            <button type="button">Facebook</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Switch between forms
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const loginForm = document.getElementById('formlogin');
+        const signupForm = document.getElementById('formsignup');
+
+        loginBtn.addEventListener('click', () => {
+            loginBtn.classList.add('active');
+            signupBtn.classList.remove('active');
+            loginForm.classList.add('active');
+            signupForm.classList.remove('active');
+        });
+
+        signupBtn.addEventListener('click', () => {
+            signupBtn.classList.add('active');
+            loginBtn.classList.remove('active');
+            signupForm.classList.add('active');
+            loginForm.classList.remove('active');
+        });
+    </script>
+}
