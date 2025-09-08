@@ -21,7 +21,7 @@
     @foreach (var utilisateur in Model)
     {
         <tr>
-            <td>@utilisateur.Nom</td>
+            <td>@utilisateur.Username</td>
             <td>@utilisateur.Email</td>
             <td>@(utilisateur.Admin ? "Oui" : "Non")</td>
             <td>

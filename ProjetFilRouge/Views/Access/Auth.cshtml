@@ -1,18 +1,22 @@
-﻿@{
-    ViewData["Title"] = "Login/Register - Nivo";
+﻿@model ProjetFilRouge.Models.Utilisateur
+
+@{
+    ViewData["Title"] = "Login/Register - ProjetFilRouge";
     Layout = "_Layout";
 
     var activeForm = ViewData["ActiveForm"] as string ?? "SignIn";
+    var validateMessage = ViewData["ValidateMessage"] as string;
 }
 
 <section class="authentification | padding-block-900">
     <div class="container">
         <div class="auth-box even-columns" id="auth-container">
+
             <!-- LEFT PANEL -->
             <div class="left-panel">
                 <h1 class="fs-primary-heading">Hello!</h1>
                 <p>
-                    Welcome to Nivo. Please sign in with your account
+                    Welcome to ProjetFilRouge. Please sign in with your account
                     or create a new one to continue.
                 </p>
 
@@ -24,6 +28,13 @@
 
             <!-- RIGHT PANEL -->
             <div class="right-panel">
+
+                <!-- VALIDATION FEEDBACK -->
+                @if (!string.IsNullOrEmpty(validateMessage))
+                {
+                    <div class="validation-message">@validateMessage</div>
+                }
+
                 <!-- SIGN IN FORM -->
                 <div class="form login-form @(activeForm == "SignIn" ? "active" : "")" id="formlogin">
                     <form asp-action="SignIn" asp-controller="Access" method="post">
@@ -32,13 +43,13 @@
                         <div asp-validation-summary="All" class="error-message"></div>
 
                         <div>
-                            <input asp-for="@nameof(ProjetFilRouge.ViewModels.SignInViewModel.Email)" placeholder="Email" />
-                            <span asp-validation-for="@nameof(ProjetFilRouge.ViewModels.SignInViewModel.Email)" class="error-message"></span>
+                            <input asp-for="Email" placeholder="Email" />
+                            <span asp-validation-for="Email" class="error-message"></span>
                         </div>
 
                         <div>
-                            <input asp-for="@nameof(ProjetFilRouge.ViewModels.SignInViewModel.Password)" type="password" placeholder="Password" />
-                            <span asp-validation-for="@nameof(ProjetFilRouge.ViewModels.SignInViewModel.Password)" class="error-message"></span>
+                            <input asp-for="Password" type="password" placeholder="Mot de passe" />
+                            <span asp-validation-for="Password" class="error-message"></span>
                         </div>
 
                         <button type="submit">Login</button>
@@ -48,28 +59,22 @@
                 <!-- SIGN UP FORM -->
                 <div class="form signup-form @(activeForm == "SignUp" ? "active" : "")" id="formsignup">
                     <form asp-action="SignUp" asp-controller="Access" method="post">
-                        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
 
                         <div asp-validation-summary="All" class="error-message"></div>
 
                         <div>
-                            <input asp-for="@nameof(ProjetFilRouge.ViewModel.SignUpViewModel.Username)" placeholder="Username" />
-                            <span asp-validation-for="@nameof(ProjetFilRouge.ViewModel.SignUpViewModel.Username)" class="error-message"></span>
+                            <input asp-for="Username" placeholder="Nom" />
+                            <span asp-validation-for="Username" class="error-message"></span>
                         </div>
 
                         <div>
-                            <input asp-for="@nameof(ProjetFilRouge.ViewModel.SignUpViewModel.Email)" placeholder="Email" />
-                            <span asp-validation-for="@nameof(ProjetFilRouge.ViewModel.SignUpViewModel.Email)" class="error-message"></span>
+                            <input asp-for="Email" placeholder="Email" />
+                            <span asp-validation-for="Email" class="error-message"></span>
                         </div>
 
                         <div>
-                            <input asp-for="@nameof(ProjetFilRouge.ViewModel.SignUpViewModel.Password)" type="password" placeholder="Password" />
-                            <span asp-validation-for="@nameof(ProjetFilRouge.ViewModel.SignUpViewModel.Password)" class="error-message"></span>
-                        </div>
-
-                        <div>
-                            <input asp-for="@nameof(ProjetFilRouge.ViewModel.SignUpViewModel.ConfirmPassword)" type="password" placeholder="Confirm Password" />
-                            <span asp-validation-for="@nameof(ProjetFilRouge.ViewModel.SignUpViewModel.ConfirmPassword)" class="error-message"></span>
+                            <input asp-for="Password" type="password" placeholder="Mot de passe" />
+                            <span asp-validation-for="Password" class="error-message"></span>
                         </div>
 
                         <button type="submit">Sign Up</button>
