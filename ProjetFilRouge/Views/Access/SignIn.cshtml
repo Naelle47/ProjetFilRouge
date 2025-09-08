@@ -1,22 +1,5 @@
-﻿@model Utilisateur
-@*
+﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
-
-<!-- TO DO : Ajouter la classe "visually-hidden" sur les Label -->
-<!-- TO DO : Ajouter le champ de Pseudo comme option de connexion -->
-
-<form asp-controller="Access" asp-action="SignIn" method="post">
-    <label asp-for="@Model.Email"></label>
-    <input asp-for="@Model.Email" />
-
-    <label asp-for="@Model.MotDePasse"></label>
-    <input asp-for="@Model.MotDePasse" />
-    @if (Context.Request.Query.ContainsKey("ReturnUrl"))
-    {
-        <input type="hidden" name="ReturnURL" value="@Context.Request.Query["ReturnUrl"]">
-    }
-    <input type="submit" value="Se connecter" />
-</form>
