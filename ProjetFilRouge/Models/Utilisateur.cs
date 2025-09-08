@@ -4,6 +4,14 @@ namespace ProjetFilRouge.Models
 {
     public class Utilisateur
     {
+
+        //public Utilisateur(string username, string password, string email)
+        //{
+        //    this.Username = username;
+        //    this.Password = password;
+        //    this.Email = email;
+        //}
+
         public int UtilisateurId { get; set; }
 
         [Required(ErrorMessage ="Le champ est obligatoire.")]
@@ -24,5 +32,6 @@ namespace ProjetFilRouge.Models
         public DateTime DateInscription { get; set; }
 
         public bool Admin { get; set; }
+        public bool EmailVerified { get; set; }
     }
 }
