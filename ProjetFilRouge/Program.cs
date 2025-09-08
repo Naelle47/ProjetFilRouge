@@ -22,6 +22,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 
     options.MinimumSameSitePolicy = SameSiteMode.Lax;
     options.ConsentCookieValue = "true";
+
 });
 
 var app = builder.Build();
@@ -30,6 +31,7 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error"); // pour la page d'erreur personnalisée
+    app.UseStatusCodePagesWithReExecute("/Home/HandleError/{0}");
 }
 app.UseStaticFiles();
 

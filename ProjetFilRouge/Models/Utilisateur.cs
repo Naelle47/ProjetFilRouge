@@ -7,7 +7,7 @@ namespace ProjetFilRouge.Models
         public int UtilisateurId { get; set; }
 
         [Required(ErrorMessage ="Le champ est obligatoire.")]
-        public string? Nom { get; set; }
+        public required string Nom { get; set; }
 
         [Required(ErrorMessage ="Le champ est obligatoire.")]
         [EmailAddress(ErrorMessage ="Adresse e-mail invalide.")]

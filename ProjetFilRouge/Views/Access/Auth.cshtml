@@ -1,0 +1,107 @@
+﻿@{
+    ViewData["Title"] = "Login/Register - Nivo";
+    Layout = "_Layout";
+
+    var activeForm = ViewData["ActiveForm"] as string ?? "SignIn";
+}
+
+<section class="authentification | padding-block-900">
+    <div class="container">
+        <div class="auth-box even-columns" id="auth-container">
+            <!-- LEFT PANEL -->
+            <div class="left-panel">
+                <h1 class="fs-primary-heading">Hello!</h1>
+                <p>
+                    Welcome to Nivo. Please sign in with your account
+                    or create a new one to continue.
+                </p>
+
+                <div class="switch-btns">
+                    <button class="@(activeForm == "SignIn" ? "active" : "")" id="loginBtn">Sign In</button>
+                    <button class="@(activeForm == "SignUp" ? "active" : "")" id="signupBtn">Sign Up</button>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL -->
+            <div class="right-panel">
+                <!-- SIGN IN FORM -->
+                <div class="form login-form @(activeForm == "SignIn" ? "active" : "")" id="formlogin">
+                    <form asp-action="SignIn" asp-controller="Access" method="post">
+                        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+
+                        <div asp-validation-summary="All" class="error-message"></div>
+
+                        <div>
+                            <input asp-for="@nameof(ProjetFilRouge.ViewModels.SignInViewModel.Email)" placeholder="Email" />
+                            <span asp-validation-for="@nameof(ProjetFilRouge.ViewModels.SignInViewModel.Email)" class="error-message"></span>
+                        </div>
+
+                        <div>
+                            <input asp-for="@nameof(ProjetFilRouge.ViewModels.SignInViewModel.Password)" type="password" placeholder="Password" />
+                            <span asp-validation-for="@nameof(ProjetFilRouge.ViewModels.SignInViewModel.Password)" class="error-message"></span>
+                        </div>
+
+                        <button type="submit">Login</button>
+                    </form>
+                </div>
+
+                <!-- SIGN UP FORM -->
+                <div class="form signup-form @(activeForm == "SignUp" ? "active" : "")" id="formsignup">
+                    <form asp-action="SignUp" asp-controller="Access" method="post">
+                        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+
+                        <div asp-validation-summary="All" class="error-message"></div>
+
+                        <div>
+                            <input asp-for="@nameof(ProjetFilRouge.ViewModel.SignUpViewModel.Username)" placeholder="Username" />
+                            <span asp-validation-for="@nameof(ProjetFilRouge.ViewModel.SignUpViewModel.Username)" class="error-message"></span>
+                        </div>
+
+                        <div>
+                            <input asp-for="@nameof(ProjetFilRouge.ViewModel.SignUpViewModel.Email)" placeholder="Email" />
+                            <span asp-validation-for="@nameof(ProjetFilRouge.ViewModel.SignUpViewModel.Email)" class="error-message"></span>
+                        </div>
+
+                        <div>
+                            <input asp-for="@nameof(ProjetFilRouge.ViewModel.SignUpViewModel.Password)" type="password" placeholder="Password" />
+                            <span asp-validation-for="@nameof(ProjetFilRouge.ViewModel.SignUpViewModel.Password)" class="error-message"></span>
+                        </div>
+
+                        <div>
+                            <input asp-for="@nameof(ProjetFilRouge.ViewModel.SignUpViewModel.ConfirmPassword)" type="password" placeholder="Confirm Password" />
+                            <span asp-validation-for="@nameof(ProjetFilRouge.ViewModel.SignUpViewModel.ConfirmPassword)" class="error-message"></span>
+                        </div>
+
+                        <button type="submit">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Switch between forms
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const loginForm = document.getElementById('formlogin');
+        const signupForm = document.getElementById('formsignup');
+
+        loginBtn.addEventListener('click', () => {
+            loginBtn.classList.add('active');
+            signupBtn.classList.remove('active');
+            loginForm.classList.add('active');
+            signupForm.classList.remove('active');
+        });
+
+        signupBtn.addEventListener('click', () => {
+            signupBtn.classList.add('active');
+            loginBtn.classList.remove('active');
+            signupForm.classList.add('active');
+            loginForm.classList.remove('active');
+        });
+    </script>
+}
