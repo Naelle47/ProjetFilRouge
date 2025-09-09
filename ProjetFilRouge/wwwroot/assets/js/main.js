@@ -16,4 +16,18 @@ document.querySelectorAll('.accordion-header').forEach(header => {
       const item = header.parentElement;
       item.classList.toggle('active');
     });
-  });
+});
+
+// PASSWORD VALIDATION
+const password = document.getElementById("signup-password");
+const confirmPassword = document.getElementById("signup-confirm-password");
+const message = document.getElementById("password-match-message");
+
+document.querySelector("form").addEventListener("submit", function (e) {
+    if (password.value !== confirmPassword.value) {
+        e.preventDefault();
+        message.textContent = "Passwords do not match!";
+    } else {
+        message.textContent = "";
+    }
+});

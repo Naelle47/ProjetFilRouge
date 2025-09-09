@@ -40,14 +40,14 @@
                         <li><a asp-controller="Jeux" asp-action="Index">Games</a></li>
                         <li><a asp-controller="Events" asp-action="Index">Events</a></li> <!-- page non existante mais possiblement intégrée si j'ai le temps.-->
                         <li><a asp-controller="Contact" asp-action="Index">Contact</a></li>
-                        <!-- Liens pour les boutons : Connexion, Inscription, Deconnexion -->
+@*                         <!-- Liens pour les boutons : Connexion, Inscription, Deconnexion -->
                         @if(!User.Identity.IsAuthenticated)
                         {
                             <li><a asp-controller="Access" asp-action="SignUp">Sign Up</a></li>
                             <li><a asp-controller="Access" asp-action="SignIn">Sign In</a></li>
                         }
                         <li><a asp-controller="Access" asp-action="SignOut">Sign Out</a></li>
-                        <li>@User.FindFirstValue(ClaimTypes.Name)</li>
+                        <li>@User.FindFirstValue(ClaimTypes.Name)</li> *@
                     </ul>
                 </nav>
             </div>

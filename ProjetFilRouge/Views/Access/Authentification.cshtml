@@ -13,7 +13,9 @@
                 <div class="left-panel">
                     <h1 class="fs-primary-heading">Hello !</h1>
                     <p>
-                        Welcome to our website. To view our content, please log in or create an account.
+                        Welcome to our brand new website. To view our content, you need
+                        to create an account using the Sign Up form. Or be logged in
+                        your account.
                     </p>
 
                     <div class="switch-btns">
@@ -34,14 +36,18 @@
                             @Html.AntiForgeryToken()
 
                             <label asp-for="Email" class="visually-hidden"></label>
-                            <input asp-for="Email" placeholder="Email" />
+                            <input asp-for="Email" name="email" placeholder="Email" />
                             <span asp-validation-for="Email" class="text-danger"></span>
 
                             <label asp-for="Password" class="visually-hidden"></label>
-                            <input asp-for="Password" placeholder="Password" />
+                            <input asp-for="Password" name="password" placeholder="Password" />
                             <span asp-validation-for="Password" class="text-danger"></span>
 
-                            <button type="submit">Login</button>
+                            <button type="submit">Sign In</button>
+                            <div class="social-login">
+                                <button type="button">Google</button>
+                                <button type="button">Facebook</button>
+                            </div>
                         </form>
                     </div>
 
@@ -51,18 +57,26 @@
                             @Html.AntiForgeryToken()
 
                             <label asp-for="Username" class="visually-hidden"></label>
-                            <input asp-for="Username" placeholder="Username" />
+                            <input asp-for="Username" name="username" placeholder="Username" />
                             <span asp-validation-for="Username" class="text-danger"></span>
 
                             <label asp-for="Email" class="visually-hidden"></label>
-                            <input asp-for="Email" placeholder="Email" />
+                            <input asp-for="Email" name="email" placeholder="Email" />
                             <span asp-validation-for="Email" class="text-danger"></span>
 
                             <label asp-for="Password" class="visually-hidden"></label>
-                            <input asp-for="Password" placeholder="Password" />
+                            <input asp-for="Password" name="password" placeholder="Password" />
                             <span asp-validation-for="Password" class="text-danger"></span>
 
+                            <label for="signup-confirm-password" class="visually-hidden">Confirm Password</label>
+                            <input type="password" id="signup-confirm-password" placeholder="Confirm Password" />
+                            <span id="password-match-message" class="text-danger"></span>
+
                             <button type="submit">Sign Up</button>
+                            <div class="social-login">
+                                <button type="button">Google</button>
+                                <button type="button">Facebook</button>
+                            </div>
                         </form>
                     </div>
                 </div>

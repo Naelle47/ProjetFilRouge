@@ -21,6 +21,13 @@ namespace ProjetFilRouge.Controllers
             _connexionString = configuration.GetConnectionString("GestionCatalogue")!;
         }
 
+        [HttpGet]
+        public IActionResult Authentification(string? activeForm = "SignIn")
+        {
+            ViewData["ActiveForm"] = activeForm;
+            return View();
+        }
+
         // --- SIGN UP ---
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -29,21 +36,19 @@ namespace ProjetFilRouge.Controllers
             if (!ModelState.IsValid)
             {
                 ViewData["ActiveForm"] = "SignUp";
-                return View("Auth", utilisateur);
+                return View("Authentification", utilisateur);
             }
 
-            string query = @"INSERT INTO ""Utilisateurs"" 
+            string query = @"INSERT INTO utilisateurs 
                             (username, email, password, dateinscription, admin, emailverified, verificationtoken) 
-                            VALUES (@Username, @Email, @PasswordHash, false, false, @VerificationToken)";
+                            VALUES (@Username, @Email, @PasswordHash, @DateInscription, false, false, @VerificationToken)";
 
             try
             {
                 using (var connexion = new NpgsqlConnection(_connexionString))
                 {
-                    // Hashage du mot de passe
                     string motDePasseHache = BCrypt.Net.BCrypt.HashPassword(utilisateur.Password);
 
-                    // Génération du token de vérification
                     byte[] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
                     byte[] key = Guid.NewGuid().ToByteArray();
                     string token = Convert.ToBase64String(time.Concat(key).ToArray());
@@ -68,29 +73,71 @@ namespace ProjetFilRouge.Controllers
                         Query = $"email={HttpUtility.UrlEncode(utilisateur.Email)}&token={HttpUtility.UrlEncode(token)}"
                     };
 
-                    // Envoi du mail de vérification
-                    MailMessage mail = new MailMessage();
-                    mail.From = new MailAddress("app@nivo.fr");
+                    MailMessage mail = new MailMessage
+                    {
+                        From = new MailAddress("app@nivo.fr"),
+                        Subject = "Vérification d'email",
+                        Body = $"<a href=\"{uriBuilder.Uri}\">Vérifier l'email</a>",
+                        IsBodyHtml = true
+                    };
                     mail.To.Add(new MailAddress(utilisateur.Email));
-                    mail.Subject = "Vérification d'email";
-                    mail.Body = $"<a href={uriBuilder.Uri}>Vérifier l'email</a>";
-                    mail.IsBodyHtml = true;
 
                     using (var smtp = new SmtpClient("localhost", 587))
                     {
                         smtp.Credentials = new NetworkCredential("app@nivo.fr", "fromage");
-                        smtp.EnableSsl = false; // ⚠️ doit être true en prod
+                        smtp.EnableSsl = false; // ⚠️ mettre true en prod
                         smtp.Send(mail);
                     }
 
-                    return RedirectToAction("Auth", new { activeForm = "SignIn" });
+                    return RedirectToAction("Authentification", new { activeForm = "SignIn" });
                 }
             }
             catch (Exception e)
             {
                 ViewData["ActiveForm"] = "SignUp";
                 ViewData["ValidateMessage"] = e.Message;
-                return View("Auth", utilisateur);
+                return View("Authentification", utilisateur);
+            }
+        }
+
+        // --- VERIFY EMAIL ---
+        [HttpGet]
+        public IActionResult VerifyEmail(string email, string token)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token))
+            {
+                ViewData["ActiveForm"] = "SignIn";
+                ViewData["ValidateMessage"] = "Lien de vérification invalide.";
+                return View("Authentification");
+            }
+
+            string query = @"UPDATE utilisateurs 
+                             SET emailverified = true, verificationtoken = null 
+                             WHERE email = @Email AND verificationtoken = @Token";
+
+            try
+            {
+                using (var connexion = new NpgsqlConnection(_connexionString))
+                {
+                    int rows = connexion.Execute(query, new { Email = email, Token = token });
+
+                    if (rows == 0)
+                    {
+                        ViewData["ActiveForm"] = "SignIn";
+                        ViewData["ValidateMessage"] = "Lien de vérification invalide ou déjà utilisé.";
+                        return View("Authentification");
+                    }
+
+                    ViewData["ActiveForm"] = "SignIn";
+                    ViewData["ValidateMessage"] = "Email vérifié avec succès, vous pouvez maintenant vous connecter.";
+                    return View("Authentification");
+                }
+            }
+            catch (Exception e)
+            {
+                ViewData["ActiveForm"] = "SignIn";
+                ViewData["ValidateMessage"] = e.Message;
+                return View("Authentification");
             }
         }
 
@@ -102,10 +149,10 @@ namespace ProjetFilRouge.Controllers
             if (!ModelState.IsValid)
             {
                 ViewData["ActiveForm"] = "SignIn";
-                return View("Auth", utilisateur);
+                return View("Authentification", utilisateur);
             }
 
-            string query = @"SELECT * FROM ""Utilisateurs"" WHERE email = @Email";
+            string query = @"SELECT * FROM utilisateurs WHERE email = @Email";
 
             try
             {
@@ -119,13 +166,25 @@ namespace ProjetFilRouge.Controllers
                     if (!user.EmailVerified)
                         throw new Exception("Veuillez vérifier votre adresse e-mail avant de vous connecter.");
 
-                    // Création des claims
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.Name, user.Username),
                         new Claim(ClaimTypes.Email, user.Email),
                         new Claim(ClaimTypes.Role, user.Admin ? "Admin" : "User")
                     };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    var authProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        ExpiresUtc = DateTimeOffset.UtcNow.AddHours(2)
+                    };
+
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity),
+                        authProperties);
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -134,8 +193,17 @@ namespace ProjetFilRouge.Controllers
             {
                 ViewData["ActiveForm"] = "SignIn";
                 ViewData["ValidateMessage"] = e.Message;
-                return View("Auth", utilisateur);
+                return View("Authentification", utilisateur);
             }
+        }
+
+        // --- LOGOUT ---
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Authentification", "Access");
         }
     }
 }
