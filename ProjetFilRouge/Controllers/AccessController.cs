@@ -66,20 +66,17 @@ namespace ProjetFilRouge.Controllers
                         throw new Exception("Erreur pendant l'inscription, veuillez réessayer plus tard.");
 
                     // Lien de vérification
-                    UriBuilder uriBuilder = new UriBuilder
-                    {
-                        Port = 5103,
-                        Path = "/Access/VerifyEmail",
-                        Query = $"email={HttpUtility.UrlEncode(utilisateur.Email)}&token={HttpUtility.UrlEncode(token)}"
-                    };
+                    UriBuilder uriBuilder = new UriBuilder();
+                    uriBuilder.Port = 5106;
+                    uriBuilder.Path = "/Access/VerifyEmail";
+                    uriBuilder.Query = $"email={HttpUtility.UrlEncode(utilisateur.Email)}&token={HttpUtility.UrlEncode(token)}";
 
-                    MailMessage mail = new MailMessage
-                    {
-                        From = new MailAddress("app@nivo.fr"),
-                        Subject = "Vérification d'email",
-                        Body = $"<a href=\"{uriBuilder.Uri}\">Vérifier l'email</a>",
-                        IsBodyHtml = true
-                    };
+                    MailMessage mail = new MailMessage();
+                    mail.From = new MailAddress("app@nivo.fr");
+                    mail.Subject = "Vérification d'email";
+                    mail.Body = $"<a href=\"{uriBuilder.Uri}\">Vérifier l'email</a>";
+                    mail.IsBodyHtml = true;
+                    
                     mail.To.Add(new MailAddress(utilisateur.Email));
 
                     using (var smtp = new SmtpClient("localhost", 587))
@@ -101,42 +98,27 @@ namespace ProjetFilRouge.Controllers
         }
 
         // --- VERIFY EMAIL ---
-        [HttpGet]
-        public IActionResult VerifyEmail(string email, string token)
+        public IActionResult VerifyEmail([FromQuery] string email, [FromQuery] string token)
         {
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token))
-            {
-                ViewData["ActiveForm"] = "SignIn";
-                ViewData["ValidateMessage"] = "Lien de vérification invalide.";
-                return View("Authentification");
-            }
-
-            string query = @"UPDATE utilisateurs 
-                             SET emailverified = true, verificationtoken = null 
-                             WHERE email = @Email AND verificationtoken = @Token";
+            string query = "UPDATE Utilisateurs SET emailverified=true WHERE email=@Email AND verificationtoken=@Token";
 
             try
             {
                 using (var connexion = new NpgsqlConnection(_connexionString))
                 {
-                    int rows = connexion.Execute(query, new { Email = email, Token = token });
+                    int res = connexion.Execute(query, new { Email = email, Token = token });
+                    if (res != 1)
+                        throw new Exception("Pb pendant la vérif, veuillez recommencer");
 
-                    if (rows == 0)
-                    {
-                        ViewData["ActiveForm"] = "SignIn";
-                        ViewData["ValidateMessage"] = "Lien de vérification invalide ou déjà utilisé.";
-                        return View("Authentification");
-                    }
-
-                    ViewData["ActiveForm"] = "SignIn";
-                    ViewData["ValidateMessage"] = "Email vérifié avec succès, vous pouvez maintenant vous connecter.";
+                    ViewData["ValidateMessage"] = "Email vérifié, vous pouvez maintenant vous connecter.";
+                    ViewData["ActiveForm"] = "SignIn"; 
                     return View("Authentification");
                 }
             }
             catch (Exception e)
             {
-                ViewData["ActiveForm"] = "SignIn";
                 ViewData["ValidateMessage"] = e.Message;
+                ViewData["ActiveForm"] = "SignUp"; 
                 return View("Authentification");
             }
         }
@@ -152,41 +134,14 @@ namespace ProjetFilRouge.Controllers
                 return View("Authentification", utilisateur);
             }
 
-            string query = @"SELECT * FROM utilisateurs WHERE email = @Email";
+            string query = @"SELECT * FROM utilisateurs WHERE email = @Email AND emailverified=true";
 
             try
             {
+                Utilisateur userFromBDD;
                 using (var connexion = new NpgsqlConnection(_connexionString))
                 {
-                    var user = connexion.QueryFirstOrDefault<Utilisateur>(query, new { utilisateur.Email });
-
-                    if (user == null || !BCrypt.Net.BCrypt.Verify(utilisateur.Password, user.Password))
-                        throw new Exception("Email ou mot de passe incorrect.");
-
-                    if (!user.EmailVerified)
-                        throw new Exception("Veuillez vérifier votre adresse e-mail avant de vous connecter.");
-
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, user.Username),
-                        new Claim(ClaimTypes.Email, user.Email),
-                        new Claim(ClaimTypes.Role, user.Admin ? "Admin" : "User")
-                    };
-
-                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                    var authProperties = new AuthenticationProperties
-                    {
-                        IsPersistent = true,
-                        ExpiresUtc = DateTimeOffset.UtcNow.AddHours(2)
-                    };
-
-                    await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(claimsIdentity),
-                        authProperties);
-
-                    return RedirectToAction("Index", "Home");
+                    List<Utilisateur> users = connexion.Query<Utilisateur>
                 }
             }
             catch (Exception e)

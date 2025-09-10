@@ -1,21 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjetFilRouge.Models
 {
     public class Utilisateur
     {
-
-        //public Utilisateur(string username, string password, string email)
-        //{
-        //    this.Username = username;
-        //    this.Password = password;
-        //    this.Email = email;
-        //}
-
         public int UtilisateurId { get; set; }
 
         [Required(ErrorMessage ="Le champ est obligatoire.")]
-        public required string Username { get; set; }
+        public string? Username { get; set; }
 
         [Required(ErrorMessage ="Le champ est obligatoire.")]
         [EmailAddress(ErrorMessage ="Adresse e-mail invalide.")]
@@ -24,12 +17,17 @@ namespace ProjetFilRouge.Models
         [Display(Name ="Mot de passe")]
         [DataType(DataType.Password)]
         [Required(ErrorMessage ="Le champ est obligatoire.")]
-        [StringLength(10, ErrorMessage = "Le mot de passe doit faire un maximum de 10 caractères.")]
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "Le mot de passe doit faire entre 6 et 100 caractères.")]
         public required string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage = "Les mots de passe ne correspondent pas.")]
+        [NotMapped]
+        public string? ConfirmPassword { get; set; }
 
         [Display(Name = "Inscription : ")]
         [DataType(DataType.Date)]
-        public DateTime DateInscription { get; set; }
+        public DateTime DateInscription { get; set; } = DateTime.Now;
 
         public bool Admin { get; set; }
         public bool EmailVerified { get; set; }
