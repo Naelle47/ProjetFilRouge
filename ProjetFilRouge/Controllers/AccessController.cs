@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Data;
+using System.Net;
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Web;
@@ -6,6 +7,7 @@ using BCrypt.Net;
 using Dapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using ProjetFilRouge.Models;
@@ -134,15 +136,25 @@ namespace ProjetFilRouge.Controllers
                 return View("Authentification", utilisateur);
             }
 
-            string query = @"SELECT * FROM utilisateurs WHERE email = @Email AND emailverified=true";
+            string query = @"SELECT * FROM utilisateurs JOIN Roles on roleid_fk = roles.id WHERE email = @Email AND emailverified=true";
 
             try
             {
                 Utilisateur userFromBDD;
                 using (var connexion = new NpgsqlConnection(_connexionString))
                 {
-                    List<Utilisateur> users = connexion.Query<Utilisateur>
+                    List<Utilisateur> users = connexion.Query<Utilisateur, Role, Utilisateur>(query, (utilisateur, role) =>
+                    {
+                        utilisateur.role = role;
+                        return utilisateur;
+                    }
+                    ,
+                    new { email = utilisateur.email },
+                    splitOn: "id"
+                    ).ToList();
+                    userFromBDD = users.First();
                 }
+            }
             }
             catch (Exception e)
             {
