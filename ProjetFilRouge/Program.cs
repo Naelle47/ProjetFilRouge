@@ -9,8 +9,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
             option =>
             {
-                option.LoginPath = "/Access/Authentification";
-                option.LogoutPath = "/Access/Authentification";
+                option.LoginPath = "/Access/SignIn";
                 option.ExpireTimeSpan = TimeSpan.FromMinutes(20);
             }
         );

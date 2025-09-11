@@ -435,7 +435,6 @@ p:not([class]) {
     display: flex;
     min-height: 520px;
     width: 100%;
-    overflow: hidden;
     background: var(--clr-neutral-000);
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(2, 8, 23, 0.12);
@@ -465,59 +464,27 @@ p:not([class]) {
         font-weight: var(--fw-bold);
     }
 
-/* Switch buttons */
-.switch-btns {
-    position: absolute;
-    top: 50%;
-    left: 100%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
 
-    .switch-btns button {
-        background: var(--clr-neutral-000);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 20px;
-        cursor: pointer;
-        font-weight: var(--fw-bold);
-        color: var(--clr-accent-400);
-        transition: all 0.3s ease;
-    }
-
-        .switch-btns button.active {
-            background: var(--clr-accent-400);
-            color: var(--clr-neutral-000);
-        }
 
 /* ----- Right Panel ----- */
 .right-panel {
     flex: 1;
     padding: 48px 42px;
     position: relative;
-    overflow: hidden;
+    display : flex;
+    justify-content : center;
+    align-items : center;
 }
 
 /* ----- Forms ----- */
 .form {
-    display: none;
     position: relative;
     width: 100%;
-    transform: translateX(50px);
-    opacity: 0;
-    pointer-events: none;
+    pointer-events: auto;
     margin-top: 0;
     transition: all 0.6s ease;
 }
 
-    .form.active {
-        display: block;
-        opacity: 1;
-        transform: translateX(0);
-        pointer-events: auto;
-    }
 
     .form form {
         display: flex;
@@ -580,18 +547,6 @@ p:not([class]) {
         padding: 2rem 1.5rem;
     }
 
-    /* Switch buttons centered above form */
-    .switch-btns {
-        position: relative;
-        top: auto;
-        left: auto;
-        transform: none;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        gap: 1rem;
-        margin-bottom: 1rem;
-    }
 
     /* Forms flow naturally but still slide-in */
     .form form {
@@ -602,12 +557,6 @@ p:not([class]) {
     .form button {
         width: 100%;
         box-sizing: border-box;
-    }
-
-    /* Preserve active button state */
-    .switch-btns button.active {
-        background: var(--clr-accent-400);
-        color: var(--clr-neutral-000);
     }
 }
 
@@ -634,18 +583,6 @@ p:not([class]) {
         font-size: 0.9rem;
         padding: 0.6rem;
     }
-
-    /* Stack switch buttons vertically */
-    .switch-btns {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-        /* Active button state preserved */
-        .switch-btns button.active {
-            background: var(--clr-accent-400);
-            color: var(--clr-neutral-000);
-        }
 }
 
 /* ====== CONTACT ====== */

@@ -23,13 +23,17 @@ namespace ProjetFilRouge.Models
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Les mots de passe ne correspondent pas.")]
         [NotMapped]
-        public string? ConfirmPassword { get; set; }
+        public string ConfirmPassword { get; set; } = string.Empty;
 
         [Display(Name = "Inscription : ")]
         [DataType(DataType.Date)]
         public DateTime DateInscription { get; set; } = DateTime.Now;
 
-        public bool Admin { get; set; }
+        public Role? role { get; set; }
+
+        [Required(ErrorMessage ="Le rôle est rerquis")]
+        public int roleid { get; set; }
+
         public bool EmailVerified { get; set; }
     }
 }

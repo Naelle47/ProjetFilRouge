@@ -23,7 +23,7 @@
         <tr>
             <td>@utilisateur.Username</td>
             <td>@utilisateur.Email</td>
-            <td>@(utilisateur.Admin ? "Oui" : "Non")</td>
+            <td>@((utilisateur.role != null) ? utilisateur.role.name : "")</td>
             <td>
                 <a href="@Url.Action("Details", new { id = utilisateur.UtilisateurId })">Détails</a> |
                 <a href="@Url.Action("Edit", new { id = utilisateur.UtilisateurId })">Modifier</a> |

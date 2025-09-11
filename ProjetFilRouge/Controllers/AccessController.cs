@@ -3,14 +3,13 @@ using System.Net;
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Web;
-using BCrypt.Net;
 using Dapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using ProjetFilRouge.Models;
+using BC = BCrypt.Net.BCrypt;
 
 namespace ProjetFilRouge.Controllers
 {
@@ -24,120 +23,114 @@ namespace ProjetFilRouge.Controllers
         }
 
         [HttpGet]
-        public IActionResult Authentification(string? activeForm = "SignIn")
+        public IActionResult SignUp()
         {
-            ViewData["ActiveForm"] = activeForm;
             return View();
         }
 
-        // --- SIGN UP ---
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult SignUp([FromForm] Utilisateur utilisateur)
         {
-            if (!ModelState.IsValid)
-            {
-                ViewData["ActiveForm"] = "SignUp";
-                return View("Authentification", utilisateur);
-            }
+            // TODO valider le modèle
 
-            string query = @"INSERT INTO utilisateurs 
-                            (username, email, password, dateinscription, admin, emailverified, verificationtoken) 
-                            VALUES (@Username, @Email, @PasswordHash, @DateInscription, false, false, @VerificationToken)";
+            string query = "INSERT INTO Utilisateurs (username,email,password,verificationtoken) VALUES (@username,@email,@password,@verificationtoken)";
 
+            // hachage du mot de passe
+            string motDePasseHache = BC.HashPassword(utilisateur.Password);
+            // génération du token de vérification d'adresse mail
+            byte[] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
+            byte[] key = Guid.NewGuid().ToByteArray();
+            string token = Convert.ToBase64String(time.Concat(key).ToArray());
             try
             {
                 using (var connexion = new NpgsqlConnection(_connexionString))
                 {
-                    string motDePasseHache = BCrypt.Net.BCrypt.HashPassword(utilisateur.Password);
-
-                    byte[] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
-                    byte[] key = Guid.NewGuid().ToByteArray();
-                    string token = Convert.ToBase64String(time.Concat(key).ToArray());
-
                     int res = connexion.Execute(query, new
                     {
-                        utilisateur.Username,
-                        utilisateur.Email,
-                        PasswordHash = motDePasseHache,
-                        DateInscription = DateTime.UtcNow,
-                        VerificationToken = token
+                        email = utilisateur.Email,
+                        password = motDePasseHache,
+                        verificationtoken = token
                     });
-
                     if (res != 1)
-                        throw new Exception("Erreur pendant l'inscription, veuillez réessayer plus tard.");
-
-                    // Lien de vérification
-                    UriBuilder uriBuilder = new UriBuilder();
-                    uriBuilder.Port = 5106;
-                    uriBuilder.Path = "/Access/VerifyEmail";
-                    uriBuilder.Query = $"email={HttpUtility.UrlEncode(utilisateur.Email)}&token={HttpUtility.UrlEncode(token)}";
-
-                    MailMessage mail = new MailMessage();
-                    mail.From = new MailAddress("app@nivo.fr");
-                    mail.Subject = "Vérification d'email";
-                    mail.Body = $"<a href=\"{uriBuilder.Uri}\">Vérifier l'email</a>";
-                    mail.IsBodyHtml = true;
-                    
-                    mail.To.Add(new MailAddress(utilisateur.Email));
-
-                    using (var smtp = new SmtpClient("localhost", 587))
                     {
-                        smtp.Credentials = new NetworkCredential("app@nivo.fr", "fromage");
-                        smtp.EnableSsl = false; // ⚠️ mettre true en prod
-                        smtp.Send(mail);
+                        throw new Exception("Erreur êndant l'inscription, essai plus tard.");
                     }
+                    else
+                    {
+                        UriBuilder uriBuilder = new UriBuilder();
+                        uriBuilder.Port = 5103;
+                        uriBuilder.Path = "/access/verifyemail";
+                        uriBuilder.Query = $"email={HttpUtility.UrlEncode(utilisateur.Email)}&token={HttpUtility.UrlEncode(token)}";
 
-                    return RedirectToAction("Authentification", new { activeForm = "SignIn" });
+                        // envoi du mail avec le token
+                        MailMessage mail = new MailMessage();
+                        mail.From = new MailAddress("app@kitsune.fr");
+                        mail.To.Add(new MailAddress(utilisateur.Email));
+                        mail.Subject = "Vérification d'email";
+                        mail.Body = $"<a href={uriBuilder.Uri}>Vérifier l'email</a>";
+                        mail.IsBodyHtml = true; // permet de dire que le corps du message contient de l'html afin que le client mail affiche le corps du message en html (comme un navigateur)
+
+                        using (var smtp = new SmtpClient("localhost", 587))
+                        {
+                            smtp.Credentials = new NetworkCredential("app@kitsune.fr", "123456");
+                            smtp.EnableSsl = false; // devrait être à true mais l'environnement de test ne le permet pas
+                            smtp.Send(mail);
+                        }
+
+                        return RedirectToAction("SignIn");
+                    }
                 }
             }
             catch (Exception e)
             {
-                ViewData["ActiveForm"] = "SignUp";
-                ViewData["ValidateMessage"] = e.Message;
-                return View("Authentification", utilisateur);
+                ViewData["ValidateMessage"] = e.Message;  // TODO à ajouter dans la vue
+                return View(utilisateur);
             }
         }
 
-        // --- VERIFY EMAIL ---
         public IActionResult VerifyEmail([FromQuery] string email, [FromQuery] string token)
         {
-            string query = "UPDATE Utilisateurs SET emailverified=true WHERE email=@Email AND verificationtoken=@Token";
-
+            // TODO vérifier qu'on recoit bien des truc
+            string query = "UPDATE Utilisateurs SET emailverified=true WHERE email=@email AND verificationtoken=@token";
             try
             {
+
+
                 using (var connexion = new NpgsqlConnection(_connexionString))
                 {
-                    int res = connexion.Execute(query, new { Email = email, Token = token });
+                    int res = connexion.Execute(query, new { email = email, token = token });
                     if (res != 1)
+                    {
                         throw new Exception("Pb pendant la vérif, veuillez recommencer");
-
-                    ViewData["ValidateMessage"] = "Email vérifié, vous pouvez maintenant vous connecter.";
-                    ViewData["ActiveForm"] = "SignIn"; 
-                    return View("Authentification");
+                    }
+                    else
+                    {
+                        ViewData["ValidateMessage"] = "Email vérifié, vous pouvez maintenant vous connecter.";
+                        return View();
+                    }
                 }
             }
+
             catch (Exception e)
             {
                 ViewData["ValidateMessage"] = e.Message;
-                ViewData["ActiveForm"] = "SignUp"; 
-                return View("Authentification");
+                return View();
+
             }
         }
 
-        // --- SIGN IN ---
+        [HttpGet]
+        public IActionResult SignIn()
+        {
+            return View();
+        }
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignIn([FromForm] Utilisateur utilisateur)
         {
-            if (!ModelState.IsValid)
-            {
-                ViewData["ActiveForm"] = "SignIn";
-                return View("Authentification", utilisateur);
-            }
-
-            string query = @"SELECT * FROM utilisateurs JOIN Roles on roleid_fk = roles.id WHERE email = @Email AND emailverified=true";
-
+            // TODO vérifier model
+            // TODO enlever l'étoile
+            string query = "SELECT * FROM Utilisateurs JOIN Roles on role_id=roles.id WHERE email=@email AND emailverified=true";
             try
             {
                 Utilisateur userFromBDD;
@@ -149,28 +142,58 @@ namespace ProjetFilRouge.Controllers
                         return utilisateur;
                     }
                     ,
-                    new { email = utilisateur.email },
+                    new { email = utilisateur.Email },
                     splitOn: "id"
                     ).ToList();
                     userFromBDD = users.First();
                 }
-            }
+
+                // vérifier le mot de passe
+                if (BC.Verify(utilisateur.Password, userFromBDD.Password))
+                {
+                    // création des revendications de l'utilisateur
+                    List<Claim> claims = new List<Claim>()
+                    {
+                        new Claim(ClaimTypes.Email, userFromBDD.Email),
+                        new Claim(ClaimTypes.NameIdentifier, userFromBDD.UtilisateurId.ToString()),
+                        new Claim(ClaimTypes.Name, userFromBDD.Username),
+                        new Claim(ClaimTypes.Role, userFromBDD.role.name ),
+                     };
+
+                    ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    // création du cookie
+                    AuthenticationProperties properties = new AuthenticationProperties()
+                    {
+                        AllowRefresh = true,
+                    };
+
+                    // vous aurez besoin de modifier le type de retour de votre méthode en Task<IActionResult> (programmation asynchrone étudiée plus tard dans la formation)
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), properties);
+                    if (Request.Form.ContainsKey("ReturnUrl"))
+                    {
+                        return Redirect(Request.Form["ReturnUrl"]!);
+                    }
+                    return RedirectToAction("Index", "Livres");
+                }
+                else
+                {
+                    // TODO gérer les erreurs du model et vider mot de passe
+                    return View(utilisateur);
+                }
             }
             catch (Exception e)
             {
-                ViewData["ActiveForm"] = "SignIn";
-                ViewData["ValidateMessage"] = e.Message;
-                return View("Authentification", utilisateur);
+                // TODO a faire
+                return View();
             }
         }
 
-        // --- LOGOUT ---
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> SignOut()
         {
+            // vous aurez besoin de modifier le type de retour de votre méthode en Task<IActionResult> (programmation asynchrone étudiée plus tard dans la formation)
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Authentification", "Access");
+            return RedirectToAction("SignIn");
         }
     }
 }
