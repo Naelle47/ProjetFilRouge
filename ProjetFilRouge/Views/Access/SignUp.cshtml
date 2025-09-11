@@ -29,17 +29,17 @@
                         <form asp-action="SignUp" method="post">
                             @Html.AntiForgeryToken()
 
-                            <label asp-for="Username" class="visually-hidden"></label>
-                            <input asp-for="Username" placeholder="Username" />
-                            <span asp-validation-for="Username" class="text-danger"></span>
+                            <label asp-for="username" class="visually-hidden"></label>
+                            <input asp-for="username" placeholder="Username" />
+                            <span asp-validation-for="username" class="text-danger"></span>
 
-                            <label asp-for="Email" class="visually-hidden"></label>
-                            <input asp-for="Email" placeholder="Email" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <label asp-for="email" class="visually-hidden"></label>
+                            <input asp-for="email" placeholder="Email" />
+                            <span asp-validation-for="email" class="text-danger"></span>
 
-                            <label asp-for="Password" class="visually-hidden"></label>
-                            <input asp-for="Password" placeholder="Password" />
-                            <span asp-validation-for="Password" class="text-danger"></span>
+                            <label asp-for="password" class="visually-hidden"></label>
+                            <input asp-for="password" type="password" id="signup-password" placeholder="Password" />
+                            <span asp-validation-for="password" class="text-danger"></span>
 
                             <label for="signup-confirm-password" class="visually-hidden">Confirm Password</label>
                             <input type="password" id="signup-confirm-password" placeholder="Confirm Password" />

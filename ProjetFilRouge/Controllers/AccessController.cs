@@ -29,61 +29,81 @@ namespace ProjetFilRouge.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult SignUp([FromForm] Utilisateur utilisateur)
         {
-            // TODO valider le modèle
+            // Validation côté serveur
+            if (!ModelState.IsValid)
+            {
+                return View(utilisateur);
+            }
 
-            string query = "INSERT INTO Utilisateurs (username,email,password,verificationtoken) VALUES (@username,@email,@password,@verificationtoken)";
+            string query = @"INSERT INTO utilisateurs
+(username, email, password, dateinscription, emailverified, verificationtoken, roleid)
+VALUES
+(@username, @email, @password, @dateinscription, @emailverified, @verificationtoken, @roleid)";
 
-            // hachage du mot de passe
-            string motDePasseHache = BC.HashPassword(utilisateur.Password);
-            // génération du token de vérification d'adresse mail
+            // Hachage du mot de passe
+            string motDePasseHache = BC.HashPassword(utilisateur.password);
+
+            // Génération du token de vérification
             byte[] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
             byte[] key = Guid.NewGuid().ToByteArray();
             string token = Convert.ToBase64String(time.Concat(key).ToArray());
+
             try
             {
                 using (var connexion = new NpgsqlConnection(_connexionString))
                 {
                     int res = connexion.Execute(query, new
                     {
-                        email = utilisateur.Email,
+                        username = utilisateur.username,
+                        email = utilisateur.email,
                         password = motDePasseHache,
-                        verificationtoken = token
+                        dateinscription = DateTime.UtcNow, // UTC pour cohérence
+                        emailverified = false,
+                        verificationtoken = token,
+                        roleid = utilisateur.roleid // peut être null
                     });
+
                     if (res != 1)
                     {
-                        throw new Exception("Erreur êndant l'inscription, essai plus tard.");
+                        throw new Exception("Erreur pendant l'inscription, essayez plus tard.");
                     }
-                    else
-                    {
-                        UriBuilder uriBuilder = new UriBuilder();
-                        uriBuilder.Port = 5103;
-                        uriBuilder.Path = "/access/verifyemail";
-                        uriBuilder.Query = $"email={HttpUtility.UrlEncode(utilisateur.Email)}&token={HttpUtility.UrlEncode(token)}";
 
-                        // envoi du mail avec le token
-                        MailMessage mail = new MailMessage();
-                        mail.From = new MailAddress("app@kitsune.fr");
-                        mail.To.Add(new MailAddress(utilisateur.Email));
+                    // Construction de l'URL de vérification
+                    UriBuilder uriBuilder = new UriBuilder
+                    {
+                        Port = 5106,
+                        Path = "/access/verifyemail",
+                        Query = $"email={HttpUtility.UrlEncode(utilisateur.email)}&token={HttpUtility.UrlEncode(token)}"
+                    };
+
+                    // Envoi du mail
+                    using (var mail = new MailMessage())
+                    {
+                        mail.From = new MailAddress("app@nivo.fr");
+                        mail.To.Add(new MailAddress(utilisateur.email));
                         mail.Subject = "Vérification d'email";
-                        mail.Body = $"<a href={uriBuilder.Uri}>Vérifier l'email</a>";
-                        mail.IsBodyHtml = true; // permet de dire que le corps du message contient de l'html afin que le client mail affiche le corps du message en html (comme un navigateur)
+                        mail.Body = $"Bonjour {utilisateur.username},<br/><br/>" +
+                                    $"Cliquez sur le lien suivant pour vérifier votre email :<br/>" +
+                                    $"<a href=\"{uriBuilder.Uri}\">{uriBuilder.Uri}</a><br/><br/>Merci!";
+                        mail.IsBodyHtml = true;
 
                         using (var smtp = new SmtpClient("localhost", 587))
                         {
-                            smtp.Credentials = new NetworkCredential("app@kitsune.fr", "123456");
-                            smtp.EnableSsl = false; // devrait être à true mais l'environnement de test ne le permet pas
+                            smtp.Credentials = new NetworkCredential("app@nivo.fr", "fromage");
+                            smtp.EnableSsl = false; // à changer en production
                             smtp.Send(mail);
                         }
-
-                        return RedirectToAction("SignIn");
                     }
+
+                    return RedirectToAction("SignIn");
                 }
             }
             catch (Exception e)
             {
-                ViewData["ValidateMessage"] = e.Message;  // TODO à ajouter dans la vue
+                ModelState.AddModelError("", e.Message);
                 return View(utilisateur);
             }
         }
@@ -119,6 +139,7 @@ namespace ProjetFilRouge.Controllers
             }
         }
 
+
         [HttpGet]
         public IActionResult SignIn()
         {
@@ -126,11 +147,12 @@ namespace ProjetFilRouge.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignIn([FromForm] Utilisateur utilisateur)
         {
             // TODO vérifier model
             // TODO enlever l'étoile
-            string query = "SELECT * FROM Utilisateurs JOIN Roles on role_id=roles.id WHERE email=@email AND emailverified=true";
+            string query = "SELECT * FROM utilisateurs JOIN Roles on role_id=roles.id WHERE email=@email AND emailverified=true";
             try
             {
                 Utilisateur userFromBDD;
@@ -142,21 +164,21 @@ namespace ProjetFilRouge.Controllers
                         return utilisateur;
                     }
                     ,
-                    new { email = utilisateur.Email },
+                    new { email = utilisateur.email },
                     splitOn: "id"
                     ).ToList();
                     userFromBDD = users.First();
                 }
 
                 // vérifier le mot de passe
-                if (BC.Verify(utilisateur.Password, userFromBDD.Password))
+                if (BC.Verify(utilisateur.password, userFromBDD.password))
                 {
                     // création des revendications de l'utilisateur
                     List<Claim> claims = new List<Claim>()
                     {
-                        new Claim(ClaimTypes.Email, userFromBDD.Email),
-                        new Claim(ClaimTypes.NameIdentifier, userFromBDD.UtilisateurId.ToString()),
-                        new Claim(ClaimTypes.Name, userFromBDD.Username),
+                        new Claim(ClaimTypes.Email, userFromBDD.email),
+                        new Claim(ClaimTypes.NameIdentifier, userFromBDD.utilisateurid.ToString()),
+                        new Claim(ClaimTypes.Name, userFromBDD.username),
                         new Claim(ClaimTypes.Role, userFromBDD.role.name ),
                      };
 
@@ -174,7 +196,7 @@ namespace ProjetFilRouge.Controllers
                     {
                         return Redirect(Request.Form["ReturnUrl"]!);
                     }
-                    return RedirectToAction("Index", "Livres");
+                    return RedirectToAction("Index", "Jeux");
                 }
                 else
                 {

@@ -13,9 +13,7 @@
                 <div class="left-panel">
                     <h1 class="fs-primary-heading">Hello !</h1>
                     <p>
-                        Welcome to our brand new website. To view our content, you need
-                        to create an account using the Sign Up form. Or be logged in
-                        your account.
+                        ...
                     </p>
 
 
@@ -31,13 +29,13 @@
                         <form asp-action="SignIn" asp-controller="Access" method="post">
                             @Html.AntiForgeryToken()
 
-                            <label asp-for="Email" class="visually-hidden"></label>
-                            <input asp-for="Email" placeholder="Email" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <label asp-for="email" class="visually-hidden"></label>
+                            <input asp-for="email" placeholder="Email" />
+                            <span asp-validation-for="email" class="text-danger"></span>
 
-                            <label asp-for="Password" class="visually-hidden"></label>
-                            <input asp-for="Password" placeholder="Password" />
-                            <span asp-validation-for="Password" class="text-danger"></span>
+                            <label asp-for="password" class="visually-hidden"></label>
+                            <input asp-for="password" placeholder="Password" />
+                            <span asp-validation-for="password" class="text-danger"></span>
 
                             <button type="submit">Sign In</button>
                             <div class="social-login">

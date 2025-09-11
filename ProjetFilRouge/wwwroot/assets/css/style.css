@@ -280,16 +280,11 @@ p:not([class]) {
         background-position: center;
     }
 
-        .mobile-nav-toggle[aria-expanded="true"] {
+     .mobile-nav-toggle[aria-expanded="true"] {
             background-image: url(/assets/img/icon-close.svg);
-            > .icon-hamburger
-
-{
-    display: none;
-}
-
-}
-}
+            > .icon-hamburger {display: none;}
+    }
+    }
 
 /*====== HERO SECTION ====== */
 .hero {
@@ -465,19 +460,35 @@ p:not([class]) {
     }
 
 
+    .switch-btns button {
+        background: var(--clr-neutral-000);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: var(--fw-bold);
+        color: var(--clr-accent-400);
+        transition: all 0.3s ease;
+    }
+
+        .switch-btns button.active {
+            background: var(--clr-accent-400);
+            color: var(--clr-neutral-000);
+        }
 
 /* ----- Right Panel ----- */
 .right-panel {
     flex: 1;
     padding: 48px 42px;
     position: relative;
-    display : flex;
-    justify-content : center;
-    align-items : center;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
 }
 
 /* ----- Forms ----- */
 .form {
+    
     position: relative;
     width: 100%;
     pointer-events: auto;
@@ -547,6 +558,18 @@ p:not([class]) {
         padding: 2rem 1.5rem;
     }
 
+    /* Switch buttons centered above form */
+    .switch-btns {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
 
     /* Forms flow naturally but still slide-in */
     .form form {
@@ -583,6 +606,13 @@ p:not([class]) {
         font-size: 0.9rem;
         padding: 0.6rem;
     }
+
+    /* Stack switch buttons vertically */
+    .switch-btns {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
 }
 
 /* ====== CONTACT ====== */
