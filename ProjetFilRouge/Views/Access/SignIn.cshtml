@@ -1,6 +1,6 @@
 ﻿@model ProjetFilRouge.Models.Utilisateur
 @{
-    ViewData["Title"] = "Authentification";
+    ViewData["Title"] = "SignIn";
 
     var validateMessage = ViewData["ValidateMessage"]?.ToString();
 }
@@ -16,11 +16,6 @@
                         ...
                     </p>
 
-
-                    @if (!string.IsNullOrEmpty(validateMessage))
-                    {
-                        <div class="validation-message">@validateMessage</div>
-                    }
                 </div>
 
                 <div class="right-panel">

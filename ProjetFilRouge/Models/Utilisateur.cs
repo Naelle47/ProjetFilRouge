@@ -4,12 +4,13 @@ namespace ProjetFilRouge.Models
 {
     public class Utilisateur
     {
-        public int utilisateurid { get; set; }  // sera rempli par la DB après insert
+        public int utilisateurid { get; } 
 
         [Required]
-        public string username { get; set; }
+        public string? username { get; set; }
 
-        [Required, EmailAddress]
+        [Required(ErrorMessage = "L'email est requis.")]
+        [DataType(DataType.EmailAddress)]
         public required string email { get; set; }
 
         [Required, DataType(DataType.Password)]
@@ -19,7 +20,8 @@ namespace ProjetFilRouge.Models
         public Role? role { get; set; }
 
         public bool emailverified { get; set; }
-        public string verificationtoken { get; set; }
+        
+        public string? verificationtoken { get; set; }
         public DateTime dateinscription { get; set; }
     }
 }

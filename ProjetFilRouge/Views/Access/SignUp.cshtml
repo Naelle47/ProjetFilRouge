@@ -15,18 +15,13 @@
                         ...
                     </p>
 
-
-                    @if (!string.IsNullOrEmpty(validateMessage))
-                    {
-                        <div class="validation-message">@validateMessage</div>
-                    }
                 </div>
 
                 <div class="right-panel">
 
                     <!-- SignUp Form -->
                     <div class="form signup-form" id="formsignup">
-                        <form asp-action="SignUp" method="post">
+                        <form asp-action="SignUp" asp-controller="Access" method="post">
                             @Html.AntiForgeryToken()
 
                             <label asp-for="username" class="visually-hidden"></label>

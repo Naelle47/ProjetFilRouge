@@ -1,22 +1,92 @@
-﻿@model Jeu// la vue s'attend à recevoir le détail d'un jeu
-<h1>Détail du jeu</h1>
-<div>
-    <p>ID: @Model.JeuId </p>
-    <p>Titre: @Model.Titre </p>
-    <p>Description: @Model.Description </p>
-    <p>Date d'ajout: @Model.DateAjout </p>
+﻿@model Jeu
+@{
+    ViewData["Title"] = "Détail du jeu - " + Model.Titre;
+}
+<main>
+    <!-- En-tête du jeu -->
+    <section class="game-header">
+        <div class="container">
+            <div class="game-image">
+                <img src="@Model.Image" alt="Jeu : @Model.Titre" />
+            </div>
+            <div class="game-info">
+                <h1>@Model.Titre</h1>
+                <p><i class="fa-solid fa-users"></i> @Model.NombreJoueursRecommandes joueurs</p>
+                <p><i class="fa-regular fa-clock"></i> @Model.TempsJeuMoyen min</p>
+                <p>
+                    <i class="fa-solid fa-tags"></i>
+                    @string.Join(", ", Model.Categories)
+                </p>
+                <div class="button-group">
+                    <a class="button">
+                        <i class="fa-regular fa-heart"></i> Ajouter aux favoris
+                    </a>
+                    <a class="button button-secondary">
+                        <i class="fa fa-bookmark" aria-hidden="true"></i> Réserver ce jeu
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="button-group">
-        <a asp-controller="Jeux" asp-action="Index" class="button" title="Retour au catalogue">
-            <span class="material-icons">arrow_back</span>
-        </a>
-        <a asp-action="Edit" asp-route-id="@Model.JeuId" class="button button-secondary">Edit</a>
-        <form asp-action="Delete" asp-route-id="@Model.JeuId" method="post" onsubmit="return confirm(" Voulez-vous vraiment supprimer ce jeu?");>
-            <button type="submit" class="button button-secondary">Delete</button>
-        </form>
-</div>
+    <!-- Description -->
+    <section class="game-description">
+        <div class="container">
+            <h2>Description complète</h2>
+            <p>@Model.Description</p>
+            <div class="highlight">
+                <h3>Pourquoi on aime ce jeu chez Nivo ?</h3>
+                <p>Ambiance conviviale, accessible aux débutants et très fun en groupe !</p>
+            </div>
+        </div>
+    </section>
 
-    <img src="@Model.Image"  alt="image du jeu"/>
-    
+    <!-- Commentaires -->
+@*     <section class="comments">
+        <div class="container">
+            <h2>Commentaires</h2>
 
-</div>
+            @if (Model.Commentaires != null && Model.Commentaires.Any())
+            {
+                @foreach (var com in Model.Commentaires)
+                {
+                    <div class="comment">
+                        <div class="avatar"></div>
+                        <div class="content">
+                            <p class="user">
+                                <strong>@com.Utilisateur</strong> • @com.DateCommentaire.ToShortDateString()
+                            </p>
+                            <p class="stars">
+                                @Html.Raw(new string('★', com.Note) + new string('☆', 5 - com.Note))
+                            </p>
+                            <p class="text">@com.Texte</p>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>Aucun commentaire pour le moment. Soyez le premier à en laisser un !</p>
+            }
+
+            <!-- Formulaire d'ajout -->
+            <form class="comment-form" method="post" asp-action="AjouterCommentaire" asp-route-jeuId="@Model.Jeuid">
+                <label for="comment" class="visually-hidden">Votre commentaire</label>
+                <textarea id="comment" name="texte" placeholder="Écrire un commentaire..." required></textarea>
+
+                <div class="form-actions">
+                    <label for="note" class="visually-hidden">Votre note</label>
+                    <select id="note" name="note">
+                        <option value="">Choisissez votre note...</option>
+                        <option value="5">★★★★★</option>
+                        <option value="4">★★★★☆</option>
+                        <option value="3">★★★☆☆</option>
+                        <option value="2">★★☆☆☆</option>
+                        <option value="1">★☆☆☆☆</option>
+                    </select>
+                    <button type="submit" class="button">Publier</button>
+                </div>
+            </form>
+        </div>
+    </section> *@
+</main>

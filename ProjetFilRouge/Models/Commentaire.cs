@@ -10,7 +10,6 @@ namespace ProjetFilRouge.Models
 
         public int UtilisateurId { get; set; }
 
-
         [DataType(DataType.MultilineText)]
         [StringLength(250,ErrorMessage ="Le commentaire ne doit pas dépasser 250 caractères.")]
         public string? Texte { get; set; }

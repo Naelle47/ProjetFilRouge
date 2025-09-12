@@ -17,6 +17,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+          rel="stylesheet" />
 </head>
 <body>
     <header class="primary-header">
@@ -40,14 +42,18 @@
                         <li><a asp-controller="Jeux" asp-action="Index">Games</a></li>
                         <li><a asp-controller="Events" asp-action="Index">Events</a></li> <!-- page non existante mais possiblement intégrée si j'ai le temps.-->
                         <li><a asp-controller="Contact" asp-action="Index">Contact</a></li>
-@*                         <!-- Liens pour les boutons : Connexion, Inscription, Deconnexion -->
+                         @* Liens pour les boutons : Connexion, Inscription, Deconnexion *@
                         @if(!User.Identity.IsAuthenticated)
                         {
                             <li><a asp-controller="Access" asp-action="SignUp">Sign Up</a></li>
                             <li><a asp-controller="Access" asp-action="SignIn">Sign In</a></li>
                         }
-                        <li><a asp-controller="Access" asp-action="SignOut">Sign Out</a></li>
-                        <li>@User.FindFirstValue(ClaimTypes.Name)</li> *@
+                        else
+                        {
+                            <li><a asp-controller="Access" asp-action="SignOut">Sign Out</a></li>
+                            <li>@User.FindFirstValue(ClaimTypes.Name)</li>
+                        }
+
                     </ul>
                 </nav>
             </div>
@@ -70,12 +76,12 @@
                 </ul>
             </nav>
         </div>
-        <div class="end-footer">
-            <p class="primary-footer__copyright">
-                Nivo Ltd. <br />Copyright @DateTime.Now.Year. All Rights Reserved
-            </p>
-        </div>
     </footer>
+    <div class="end-footer">
+        <p class="primary-footer__copyright">
+            Nivo Ltd. <br />Copyright @DateTime.Now.Year. All Rights Reserved
+        </p>
+    </div>
 
     <script src="~/assets/js/main.js" defer></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -35,13 +35,10 @@ namespace ProjetFilRouge.Controllers
             // Validation côté serveur
             if (!ModelState.IsValid)
             {
-                return View(utilisateur);
+                return View();
             }
 
-            string query = @"INSERT INTO utilisateurs
-(username, email, password, dateinscription, emailverified, verificationtoken, roleid)
-VALUES
-(@username, @email, @password, @dateinscription, @emailverified, @verificationtoken, @roleid)";
+            string query = @"INSERT INTO utilisateurs (username, email, password, verificationtoken, roleid_fk) VALUES(@username, @email, @password, @verificationtoken,2)";
 
             // Hachage du mot de passe
             string motDePasseHache = BC.HashPassword(utilisateur.password);
@@ -60,10 +57,7 @@ VALUES
                         username = utilisateur.username,
                         email = utilisateur.email,
                         password = motDePasseHache,
-                        dateinscription = DateTime.UtcNow, // UTC pour cohérence
-                        emailverified = false,
                         verificationtoken = token,
-                        roleid = utilisateur.roleid // peut être null
                     });
 
                     if (res != 1)
@@ -87,7 +81,7 @@ VALUES
                         mail.Subject = "Vérification d'email";
                         mail.Body = $"Bonjour {utilisateur.username},<br/><br/>" +
                                     $"Cliquez sur le lien suivant pour vérifier votre email :<br/>" +
-                                    $"<a href=\"{uriBuilder.Uri}\">{uriBuilder.Uri}</a><br/><br/>Merci!";
+                                    $"<a href=\"{uriBuilder.Uri}\">Vérifier Email</a><br/><br/>Merci!";
                         mail.IsBodyHtml = true;
 
                         using (var smtp = new SmtpClient("localhost", 587))
@@ -103,7 +97,7 @@ VALUES
             }
             catch (Exception e)
             {
-                ModelState.AddModelError("", e.Message);
+                ViewData["ValidateMessage"] = e.Message;  // TODO à ajouter dans la vue
                 return View(utilisateur);
             }
         }
@@ -118,7 +112,7 @@ VALUES
 
                 using (var connexion = new NpgsqlConnection(_connexionString))
                 {
-                    int res = connexion.Execute(query, new { email = email, token = token });
+                    int res = connexion.Execute(query, new { email, token });
                     if (res != 1)
                     {
                         throw new Exception("Pb pendant la vérif, veuillez recommencer");
@@ -152,7 +146,7 @@ VALUES
         {
             // TODO vérifier model
             // TODO enlever l'étoile
-            string query = "SELECT * FROM utilisateurs JOIN Roles on role_id=roles.id WHERE email=@email AND emailverified=true";
+            string query = "SELECT * FROM utilisateurs JOIN Roles on roleid_fk=roles.id WHERE email=@email AND emailverified=true";
             try
             {
                 Utilisateur userFromBDD;
@@ -164,7 +158,7 @@ VALUES
                         return utilisateur;
                     }
                     ,
-                    new { email = utilisateur.email },
+                    new { utilisateur.email },
                     splitOn: "id"
                     ).ToList();
                     userFromBDD = users.First();

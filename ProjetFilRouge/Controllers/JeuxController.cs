@@ -156,7 +156,7 @@ namespace ProjetFilRouge.Controllers
                 {
                     jeu.ImageFile.CopyTo(stream);
                 }
-
+                jeu.Image = cheminRelatif;
                 // Maintenant il faut uploader le fichier dans la BDD via une transaction avec possibilité de rollback.
 
                 using (var connexion = new NpgsqlConnection(_connexionString))
