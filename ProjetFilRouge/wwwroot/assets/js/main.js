@@ -31,3 +31,5 @@ document.querySelector("form").addEventListener("submit", function (e) {
         message.textContent = "";
     }
 });
+
+// API FETCH

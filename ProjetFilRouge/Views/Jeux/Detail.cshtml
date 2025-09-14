@@ -15,7 +15,31 @@
                 <p><i class="fa-regular fa-clock"></i> @Model.TempsJeuMoyen min</p>
                 <p>
                     <i class="fa-solid fa-tags"></i>
-                    @string.Join(", ", Model.Categories)
+                    @if (Model.Categories.Any())
+                    {
+                        foreach (var cat in Model.Categories)
+                        {
+                            <span class="badge bg-primary me-1">@cat.Nom</span>
+                        }
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Aucune catégorie</span>
+                    }
+                </p>
+                <p>
+                    <i class="fa-solid fa-palette"></i>
+                    @if (Model.Themes.Any())
+                    {
+                        foreach (var theme in Model.Themes)
+                        {
+                            <span class="badge bg-info me-1">@theme.Nom</span>
+                        }
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Aucun thème</span>
+                    }
                 </p>
                 <div class="button-group">
                     <a class="button">

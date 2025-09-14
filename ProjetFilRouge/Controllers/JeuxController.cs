@@ -30,23 +30,49 @@ namespace ProjetFilRouge.Controllers
         // afficher le catalogue des jeux
         public IActionResult Index()
         {
-            string query = @"
-            SELECT 
-                jeuid_pk AS ""JeuId"", 
-                Titre, 
-                Description, 
-                Image, 
-                NombreJoueursRecommandes, 
-                TempsJeuMoyen, 
-                DateAjout
-            FROM Jeux
-            ORDER BY ""JeuId""";
-            List<Jeu> jeux;
+            const string query = @"
+        SELECT 
+            j.jeuid_pk AS ""JeuId"", 
+            j.titre AS ""Titre"", 
+            j.description AS ""Description"", 
+            j.image AS ""Image"", 
+            j.nombrejoueursrecommandes AS ""NombreJoueursRecommandes"", 
+            j.tempsjeumoyen AS ""TempsJeuMoyen"", 
+            j.dateajout AS ""DateAjout"",
+            c.categorieid_pk AS ""CategorieId"",
+            c.nom AS ""Nom"",
+            c.description AS ""Description""
+        FROM jeux j
+        LEFT JOIN jeux_categories jc ON jc.jeuid_fk = j.jeuid_pk
+        LEFT JOIN categories c ON jc.categorieid_fk = c.categorieid_pk";
+
             using (var connexion = new NpgsqlConnection(_connexionString))
             {
-                jeux = connexion.Query<Jeu>(query).ToList();
+                var jeuxDict = new Dictionary<int, Jeu>();
+
+                var jeux = connexion.Query<Jeu, Categorie, Jeu>(
+                    query,
+                    (jeu, categorie) =>
+                    {
+                        if (!jeuxDict.TryGetValue(jeu.JeuId, out var jeuEntry))
+                        {
+                            jeuEntry = jeu;
+                            jeuEntry.Categories = new List<Categorie>();
+                            jeuxDict.Add(jeu.JeuId, jeuEntry);
+                        }
+
+                        if (categorie != null)
+                        {
+                            jeuEntry.Categories.Add(categorie);
+                        }
+
+                        return jeuEntry;
+                    },
+                    splitOn: "CategorieId"
+                ).Distinct().ToList();
+
+                return View(jeux);
             }
-            return View(jeux);
         }
 
 
@@ -55,36 +81,50 @@ namespace ProjetFilRouge.Controllers
         // afficher le détail d'un jeu -- route paramétrée
         public IActionResult Detail([FromRoute] int id)
         {
+            const string query = @"
+        SELECT 
+            jeuid_pk AS ""JeuId"", 
+            titre AS ""Titre"", 
+            description AS ""Description"", 
+            image AS ""Image"", 
+            nombrejoueursrecommandes AS ""NombreJoueursRecommandes"", 
+            tempsjeumoyen AS ""TempsJeuMoyen"", 
+            dateajout AS ""DateAjout""
+        FROM jeux
+        WHERE jeuid_pk = @identifiant;
 
-            // construction de la requête SQL
-            // déclaration de la variable permettant de contenir le résultat de la requête SQL
-            // exécuter la requête SQL
-            // retourner la vue contenant le résultat
-            string query = @"
-            SELECT 
-                jeuid_pk AS ""JeuId"", 
-                Titre, 
-                Description, 
-                Image, 
-                NombreJoueursRecommandes, 
-                TempsJeuMoyen, 
-                DateAjout
-            FROM Jeux
-            WHERE jeuid_pk = @identifiant";
-            Jeu jeu;
+        SELECT 
+            c.categorieid_pk AS ""CategorieId"", 
+            c.nom AS ""Nom"", 
+            c.description AS ""Description""
+        FROM categories c
+        INNER JOIN jeux_categories jc ON jc.categorieid_fk = c.categorieid_pk
+        WHERE jc.jeuid_fk = @identifiant;
+
+        SELECT 
+            t.themeid_pk AS ""ThemeId"", 
+            t.nom AS ""Nom"", 
+            t.description AS ""Description""
+        FROM themes t
+        INNER JOIN jeux_themes jt ON jt.themeid_fk = t.themeid_pk
+        WHERE jt.jeuid_fk = @identifiant;";
+
             using (var connexion = new NpgsqlConnection(_connexionString))
             {
-                try
+                using (var multi = connexion.QueryMultiple(query, new { identifiant = id }))
                 {
-                    jeu = connexion.QuerySingle<Jeu>(query, new { identifiant = id }); // {identifiant = id} -> objet anonyme entre accolades.
-                }
-                catch (SystemException)
-                {
-                    return NotFound();
+                    var jeu = multi.ReadSingle<Jeu>();
+                    var categories = multi.Read<Categorie>().ToList();
+                    var themes = multi.Read<Theme>().ToList();
+
+                    jeu.Categories = categories;
+                    jeu.Themes = themes;
+
+                    return View(jeu);
                 }
             }
-            return View(jeu);
         }
+
 
 
         [HttpGet]
@@ -197,6 +237,20 @@ namespace ProjetFilRouge.Controllers
                 ViewData["ValidateMessage"] = "Erreur";
                 return View();
             }
+        }
+
+        // API FETCH - Rechercher les Jeux par Nom
+        [HttpGet]
+        public IActionResult RechercheJeu([FromQuery] string titre)
+        {
+            string query = "SELECT * FROM jeux WHERE lower(titre) like lower(@titre)";
+            List<Jeu> jeux;
+            using (var connexion = new NpgsqlConnection(_connexionString))
+            {
+                jeux = connexion.Query<Jeu>(query, new { titre = "%" + titre + "%" }).ToList();
+            }
+            return Json(jeux);
+
         }
     }
 }

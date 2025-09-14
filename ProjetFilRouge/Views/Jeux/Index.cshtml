@@ -37,7 +37,16 @@
                                     </ul> -->
                                     <span class="badge">
                                         <!-- TODO : rajouter une boucle qui parcoure les catégories et les affiches en fonction du jeu-->
-                                        @jeu.Categories?
+                                        <span class="badge">
+                                            @if (jeu.Categories != null && jeu.Categories.Any())
+                                            {
+                                                <span>@string.Join(" - ", jeu.Categories.Select(c => c.Nom))</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">Aucune catégorie</span>
+                                            }
+                                        </span>
                                     </span>
                                 </div>
                             </div>

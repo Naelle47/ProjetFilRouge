@@ -30,6 +30,10 @@
                         NIVO - The Gaming Bar
                     </div>
                 </a>
+
+                <label for="recherche" class="visually-hidden">Recherche</label><input type="text" id="recherche" placeholder="Recherche">
+                <div id="affichageRecherche"></div>
+
                 <button class="mobile-nav-toggle"
                         aria-controls="primary-navigation"
                         aria-expanded="false">
@@ -55,6 +59,7 @@
                         }
 
                     </ul>
+
                 </nav>
             </div>
         </div>
@@ -64,7 +69,7 @@
         @RenderBody()
     </main>
 
-    <footer class="primary-footer | padding-block-600">
+    <footer class="primary-footer | padding-block-700">
         <div class="container">
             <nav class="footer-nav">
                 <ul aria-label="Footer" role="list">
