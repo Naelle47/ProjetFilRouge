@@ -136,6 +136,7 @@ namespace ProjetFilRouge.Controllers
 
         // Formulaire pour l'ajout d'un nouveau Jeu.
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Nouveau([FromForm] Jeu jeu)
         {
 

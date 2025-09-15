@@ -1,4 +1,4 @@
-// PRIMARY NAVIGATION SCRIPT
+﻿// PRIMARY NAVIGATION SCRIPT
 const primaryHeader = document.querySelector(".primary-header");
 const navToggle = document.querySelector(".mobile-nav-toggle");
 const primaryNav = document.querySelector(".primary-navigation");
@@ -33,3 +33,4 @@ document.querySelector("form").addEventListener("submit", function (e) {
 });
 
 // API FETCH
+    

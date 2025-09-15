@@ -987,25 +987,50 @@ a {
         border: none;
     }
 
-    /*======== API FETCH  =========*/
-div#affichageRecherche {
-    display: none;
-    width: 600px;
-    height: 600px;
+/*======== API FETCH  =========*/
+.search-bar {
+    position: relative; /* pour que l’affichage se place par rapport à la barre */
+    width: 250px; /* largeur fixe (à ajuster) */
+}
+
+#recherche {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+#affichageRecherche {
     position: absolute;
-    right: 0px;
-    top: 50px;
-    background-color: gray;
+    top: 100%; /* juste en dessous de l’input */
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none; /* masqué par défaut */
+    z-index: 1000;
 }
 
-div#affichageRecherche.actif {
-    display: block;
-}
+    #affichageRecherche.active {
+        display: block; /* affiché quand on ajoute la classe active */
+    }
+
+    #affichageRecherche .result-item {
+        display: block;
+        padding: 8px 10px;
+        text-decoration: none;
+        color: black;
+    }
+
+        #affichageRecherche .result-item:hover {
+            background: #f0f0f0;
+        }
 
 
-        /* =============================================================================== */
-        /* ====== UTILITY CLASSES ====== */
-        .visually-hidden {
+/* =============================================================================== */
+/* ====== UTILITY CLASSES ====== */
+.visually-hidden {
     position: absolute;
     position: absolute !important;
     width: 1px !important;

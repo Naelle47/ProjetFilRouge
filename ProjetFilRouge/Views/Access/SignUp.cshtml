@@ -3,7 +3,6 @@
     ViewData["Title"] = "SignUp";
     var validateMessage = ViewData["ValidateMessage"]?.ToString();
 }
-
 <main>
     <section class="authentification | padding-block-900">
         <div class="container">
@@ -14,11 +13,8 @@
                     <p>
                         ...
                     </p>
-
                 </div>
-
                 <div class="right-panel">
-
                     <!-- SignUp Form -->
                     <div class="form signup-form" id="formsignup">
                         <form asp-action="SignUp" asp-controller="Access" method="post">
@@ -36,11 +32,14 @@
                             <input asp-for="password" type="password" id="signup-password" placeholder="Password" />
                             <span asp-validation-for="password" class="text-danger"></span>
 
+                            <!-- La confirmation du mot de passe se fait en javascript donc côté client -->
                             <label for="signup-confirm-password" class="visually-hidden">Confirm Password</label>
                             <input type="password" id="signup-confirm-password" placeholder="Confirm Password" />
                             <span id="password-match-message" class="text-danger"></span>
 
                             <button type="submit">Sign Up</button>
+
+                            <!-- Les boutons de login via Google ou Facebook sont décoratifs -->
                             <div class="social-login">
                                 <button type="button">Google</button>
                                 <button type="button">Facebook</button>
