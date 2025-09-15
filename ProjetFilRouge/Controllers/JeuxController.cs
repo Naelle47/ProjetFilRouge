@@ -126,14 +126,6 @@ namespace ProjetFilRouge.Controllers
         }
 
 
-
-        [HttpGet]
-        public IActionResult Nouveau()
-        {
-            return View();
-        }
-
-
         // Formulaire pour l'ajout d'un nouveau Jeu.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -253,5 +245,14 @@ namespace ProjetFilRouge.Controllers
             return Json(jeux);
 
         }
+
+        // Formulaires pour un Nouveau Jeu
+        [HttpGet]
+        public IActionResult Nouveau()
+        {
+            return View();
+        }
+        //TODO: Méthode post et faire le ViewModel
+
     }
 }
