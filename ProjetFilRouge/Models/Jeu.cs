@@ -30,7 +30,8 @@ namespace ProjetFilRouge.Models
 
         public List<Commentaire> Commentaires { get; set; } = new List<Commentaire>();
 
-        public List<Categorie> Categories { get; set; } = new List<Categorie>();
+        public List<Categorie> Categories { get; set; } = new List<Categorie>(); // pour l'affichage
+        public List<int> CategorieIds { get; set; } //pour l'édition
 
         public List<Theme> Themes { get; set; } = new List<Theme>();
     }

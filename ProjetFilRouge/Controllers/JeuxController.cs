@@ -1,8 +1,10 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Npgsql;
 using ProjetFilRouge.Models;
+using ProjetFilRouge.ViewModel;
 namespace ProjetFilRouge.Controllers
 {
     //[Authorize]
@@ -146,6 +148,7 @@ namespace ProjetFilRouge.Controllers
             return View();
         }
         // Formulaire pour l'ajout d'un nouveau Jeu.
+        // TODO : Rajouter Edition & Suppression.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Nouveau([FromForm] Jeu jeu)
@@ -251,5 +254,54 @@ namespace ProjetFilRouge.Controllers
             }
         }
 
+// Liste des catégories
+        private List<SelectListItem> GetCategories(List<Categorie>? selectedCategories = null, List<int>? selectedCategoryIds = null)
+        {
+           List<SelectListItem> selectListItems = new List<SelectListItem>();
+           using (var connexion = new NpgsqlConnection(_connexionString))
+           {
+              string queryCategories = @"SELECT categorieid_pk AS CategorieId, nom AS Nom FROM categories";
+                List<Categorie> categories = connexion.Query<Categorie>(queryCategories).ToList();
+                foreach (Categorie categorie in categories)
+                {
+                    bool selected = false;
+                    if (selectedCategories != null)
+                    {
+                        selected = selectedCategories.Contains(categorie) ? true : false;
+                    }
+                    else if (selectedCategoriesIDs != null)
+                    {
+                        selected = selectedCategoriesIDs.Contains(categorie.id) ? true : false;
+                    }
+                    selectListItems.Add(new SelectListItem(categorie.nom, categorie.id.ToString(), selected));
+                }
+
+            }
+           return selectListItems;
+        }
+
+
+        // Edition d'un jeu existant
+        [HttpGet]
+        public IActionResult Editer([FromRoute] int id)
+        {
+            EditeurJeuxViewModel jeuxViewModel = new() { action = "Edit", titre = "Édition d'un jeu", JeuId = id };
+            try
+            {
+                using (var connexion = new NpgsqlConnection(_connexionString))
+                {
+                    string query = @"SELECT * from jeux LEFT JOIN "
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
+            catch (Exception)
+            {
+                // TODO : return error page
+            }
+            return View(jeuxViewModel);
+
+        }
     }
 }
