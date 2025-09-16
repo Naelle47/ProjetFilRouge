@@ -1000,15 +1000,18 @@ a {
 }
 
 #affichageRecherche {
+    display :block;
+    width : 150px;
+    height : 400px;
     position: absolute;
-    top: 100%; /* juste en dessous de l’input */
+    /*top: 100%;*/ /* juste en dessous de l’input */
     left: 0;
     right: 0;
     background: white;
     border: 1px solid #ccc;
     max-height: 200px;
     overflow-y: auto;
-    display: none; /* masqué par défaut */
+/*    display: none;*/
     z-index: 1000;
 }
 
@@ -1023,7 +1026,7 @@ a {
         color: black;
     }
 
-        #affichageRecherche .result-item:hover {
+   #affichageRecherche .result-item:hover {
             background: #f0f0f0;
         }
 

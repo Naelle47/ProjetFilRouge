@@ -5,7 +5,7 @@ using Npgsql;
 using ProjetFilRouge.Models;
 namespace ProjetFilRouge.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class JeuxController : Controller
     {
         // attribut stockant la chaîne de connexion à la base de données
@@ -129,11 +129,11 @@ namespace ProjetFilRouge.Controllers
         [HttpGet]
         public IActionResult RechercheJeu([FromQuery] string titre)
         {
-            string query = "SELECT * FROM jeux WHERE lower(titre) like lower(@titre)";
+            string query = "SELECT jeuid_pk as JeuId,titre FROM jeux WHERE lower(titre) like lower(@Titre)";
             List<Jeu> jeux;
             using (var connexion = new NpgsqlConnection(_connexionString))
             {
-                jeux = connexion.Query<Jeu>(query, new { titre = "%" + titre + "%" }).ToList();
+                jeux = connexion.Query<Jeu>(query, new { Titre = "%" + titre + "%" }).ToList();
             }
             return Json(jeux);
 
