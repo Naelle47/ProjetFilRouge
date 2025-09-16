@@ -66,7 +66,7 @@
     </section>
 
     <!-- Commentaires -->
-@*     <section class="comments">
+<section class="comments">
         <div class="container">
             <h2>Commentaires</h2>
 
@@ -81,7 +81,7 @@
                                 <strong>@com.Utilisateur</strong> • @com.DateCommentaire.ToShortDateString()
                             </p>
                             <p class="stars">
-                                @Html.Raw(new string('★', com.Note) + new string('☆', 5 - com.Note))
+                                @* @Html.Raw(new string('★', com.Note) + new string('☆', 5 - com.Note)) *@
                             </p>
                             <p class="text">@com.Texte</p>
                         </div>
@@ -94,7 +94,7 @@
             }
 
             <!-- Formulaire d'ajout -->
-            <form class="comment-form" method="post" asp-action="AjouterCommentaire" asp-route-jeuId="@Model.Jeuid">
+            <form class="comment-form" method="post" asp-action="AjouterCommentaire" asp-route-jeuId="@Model.JeuId">
                 <label for="comment" class="visually-hidden">Votre commentaire</label>
                 <textarea id="comment" name="texte" placeholder="Écrire un commentaire..." required></textarea>
 
@@ -112,5 +112,5 @@
                 </div>
             </form>
         </div>
-    </section> *@
+    </section>
 </main>

@@ -125,7 +125,26 @@ namespace ProjetFilRouge.Controllers
             }
         }
 
+        // API FETCH - Rechercher les Jeux par Nom
+        [HttpGet]
+        public IActionResult RechercheJeu([FromQuery] string titre)
+        {
+            string query = "SELECT * FROM jeux WHERE lower(titre) like lower(@titre)";
+            List<Jeu> jeux;
+            using (var connexion = new NpgsqlConnection(_connexionString))
+            {
+                jeux = connexion.Query<Jeu>(query, new { titre = "%" + titre + "%" }).ToList();
+            }
+            return Json(jeux);
 
+        }
+
+        // Formulaires pour un Nouveau Jeu
+        [HttpGet]
+        public IActionResult Nouveau()
+        {
+            return View();
+        }
         // Formulaire pour l'ajout d'un nouveau Jeu.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -231,28 +250,6 @@ namespace ProjetFilRouge.Controllers
                 return View();
             }
         }
-
-        // API FETCH - Rechercher les Jeux par Nom
-        [HttpGet]
-        public IActionResult RechercheJeu([FromQuery] string titre)
-        {
-            string query = "SELECT * FROM jeux WHERE lower(titre) like lower(@titre)";
-            List<Jeu> jeux;
-            using (var connexion = new NpgsqlConnection(_connexionString))
-            {
-                jeux = connexion.Query<Jeu>(query, new { titre = "%" + titre + "%" }).ToList();
-            }
-            return Json(jeux);
-
-        }
-
-        // Formulaires pour un Nouveau Jeu
-        [HttpGet]
-        public IActionResult Nouveau()
-        {
-            return View();
-        }
-        //TODO: Méthode post et faire le ViewModel
 
     }
 }
