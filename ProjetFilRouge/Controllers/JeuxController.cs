@@ -111,19 +111,37 @@ namespace ProjetFilRouge.Controllers
         INNER JOIN jeux_themes jt ON jt.themeid_fk = t.themeid_pk
         WHERE jt.jeuid_fk = @identifiant;";
 
-            using (var connexion = new NpgsqlConnection(_connexionString))
+            try
             {
-                using (var multi = connexion.QueryMultiple(query, new { identifiant = id }))
+                using (var connexion = new NpgsqlConnection(_connexionString))
                 {
-                    var jeu = multi.ReadSingle<Jeu>();
-                    var categories = multi.Read<Categorie>().ToList();
-                    var themes = multi.Read<Theme>().ToList();
+                    connexion.Open();
 
-                    jeu.Categories = categories;
-                    jeu.Themes = themes;
+                    using (var multi = connexion.QueryMultiple(query, new { identifiant = id }))
+                    {
+                        var jeu = multi.ReadSingleOrDefault<Jeu>();
 
-                    return View(jeu);
+                        if (jeu == null)
+                        {
+                            return StatusCode(404, "La page demandée n'existe pas.");
+                        }
+
+                        var categories = multi.Read<Categorie>().ToList();
+                        var themes = multi.Read<Theme>().ToList();
+
+                        jeu.Categories = categories;
+                        jeu.Themes = themes;
+
+                        return View(jeu);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                // Tu peux log l’erreur ici si besoin
+                return StatusCode(500, "Une erreur est survenue lors du chargement des données.");
+
+
             }
         }
 
@@ -253,6 +271,6 @@ namespace ProjetFilRouge.Controllers
                 return View();
             }
         }
-
     }
 }
+
