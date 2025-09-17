@@ -1,12 +1,12 @@
 ﻿@model Jeu
 @{
     ViewData["Title"] = "Détail du jeu - " + Model.Titre;
-    var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
-    var userId = userIdClaim != null ? userIdClaim.Value : "Not logged in";
+    // var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+    // var userId = userIdClaim != null ? userIdClaim.Value : "Not logged in";
 }
 
 
-<p>User ID from cookie: <strong>@userId</strong></p>
+@* <p>User ID from cookie: <strong>@userId</strong></p> *@
 
 
 <main>
