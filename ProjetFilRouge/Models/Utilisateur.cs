@@ -5,7 +5,7 @@ namespace ProjetFilRouge.Models
 {
     public class Utilisateur
     {
-        public int utilisateurid { get; } 
+        public int utilisateurid_pk { get; set; } 
 
         [Required]
         public string? username { get; set; }

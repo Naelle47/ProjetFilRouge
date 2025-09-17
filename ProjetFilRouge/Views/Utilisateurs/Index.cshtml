@@ -21,12 +21,12 @@
             @foreach (Utilisateur user in @Model!)
             {
                 <tr>
-                    <td>@(user.utilisateurid)</td>
+                    <td>@(user.utilisateurid_pk)</td>
                     <td>@(user.username)</td>
                     <td>@(user.email)</td>
                     <td>@(user.dateinscription)</td>
                     <td>@((user.role != null) ? user.role.name : "")</td>
-                    <td><a asp-controller="Utilisateurs" asp-action="Detail" asp-route-id="@(user.utilisateurid)">Détail</a></td>
+                    <td><a asp-controller="Utilisateurs" asp-action="Detail" asp-route-id="@(user.utilisateurid_pk)">Détail</a></td>
                 </tr>
             }
         </tbody>

@@ -1,10 +1,9 @@
 ﻿using Dapper;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Npgsql;
 using ProjetFilRouge.Models;
-using ProjetFilRouge.ViewModel;
 namespace ProjetFilRouge.Controllers
 {
     //[Authorize]
@@ -78,8 +77,6 @@ namespace ProjetFilRouge.Controllers
         }
 
 
-
-
         // afficher le détail d'un jeu -- route paramétrée
         public IActionResult Detail([FromRoute] int id)
         {
@@ -109,7 +106,19 @@ namespace ProjetFilRouge.Controllers
             t.description AS ""Description""
         FROM themes t
         INNER JOIN jeux_themes jt ON jt.themeid_fk = t.themeid_pk
-        WHERE jt.jeuid_fk = @identifiant;";
+        WHERE jt.jeuid_fk = @identifiant;
+
+        SELECT
+            commentaires.jeuid_fk, 
+            commentaires.utilisateurid_fk, 
+            commentaires.commentaire, 
+            commentaires.datecommentaire, 
+            commentaires.note, 
+            utilisateurs.username
+        FROM commentaires
+        LEFT JOIN utilisateurs ON commentaires.utilisateurid_fk = utilisateurs.utilisateurid_pk
+        WHERE commentaires.jeuid_fk = @identifiant
+        ORDER BY commentaires.datecommentaire DESC;";
 
             try
             {
@@ -128,9 +137,11 @@ namespace ProjetFilRouge.Controllers
 
                         var categories = multi.Read<Categorie>().ToList();
                         var themes = multi.Read<Theme>().ToList();
+                        var commentaires = multi.Read<Commentaire>().ToList();
 
                         jeu.Categories = categories;
                         jeu.Themes = themes;
+                        jeu.Commentaires = commentaires;
 
                         return View(jeu);
                     }
@@ -142,6 +153,53 @@ namespace ProjetFilRouge.Controllers
                 return StatusCode(500, "Une erreur est survenue lors du chargement des données.");
 
 
+            }
+        }
+
+        [Authorize]
+        public async Task<IActionResult> AjouterCommentaire(Commentaire comm, int JeuId)
+        {
+            try
+            {
+                var utilisateurId = User.FindFirst(ClaimTypes.NameIdentifier);
+                var utilisateurNom = User.FindFirst(ClaimTypes.Name);
+
+                comm.jeuid_fk = JeuId;
+                comm.utilisateurid_fk = int.Parse(utilisateurId.Value);
+                comm.username = utilisateurNom.Value;
+
+                using (var con = new NpgsqlConnection(_connexionString))
+                {
+                    await con.OpenAsync();
+
+                    string queryJeuTitre = "SELECT titre FROM jeux WHERE jeuid_pk = @JeuId_PK";
+
+                    string jeuTitre = con.QuerySingle<string>(queryJeuTitre, new { JeuId_PK = JeuId });
+
+                    comm.titre = jeuTitre;
+
+                    Console.WriteLine($"jeuid_fk={comm.jeuid_fk}, utilisateurid_fk={comm.utilisateurid_fk}, commentaire={comm.commentaire}, note={comm.note}");
+
+                    string insertQuery = @"INSERT INTO commentaires (jeuid_fk, utilisateurid_fk, commentaire, note)
+                                           VALUES (@jeuid_fk, @utilisateurid_fk, @commentaire, @note)";
+
+                    try
+                    {
+                        await con.ExecuteAsync(insertQuery, comm);
+                    }
+                    catch (PostgresException e) when (e.SqlState == "23505")
+                    {
+                        TempData["Commentaire Erreur"] = "Vous avez déjà commenté ce jeu.";
+                        return RedirectToAction("Detail", new {id = JeuId});
+                    }
+                }
+
+                return RedirectToAction("Detail", new {id = JeuId });
+            }
+            catch(Exception e)
+            {
+                TempData["Commentaire Erreur"] = "Une erreur est survenue pendant l'ajout de votre commentaire, essayez de nouveau.";
+                return RedirectToAction("Detail", new { id = JeuId });
             }
         }
 

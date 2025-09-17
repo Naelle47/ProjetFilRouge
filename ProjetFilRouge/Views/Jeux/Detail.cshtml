@@ -1,7 +1,14 @@
 ﻿@model Jeu
 @{
     ViewData["Title"] = "Détail du jeu - " + Model.Titre;
+    var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+    var userId = userIdClaim != null ? userIdClaim.Value : "Not logged in";
 }
+
+
+<p>User ID from cookie: <strong>@userId</strong></p>
+
+
 <main>
     <!-- En-tête du jeu -->
     <section class="game-header">
@@ -78,12 +85,12 @@
                         <div class="avatar"></div>
                         <div class="content">
                             <p class="user">
-                                <strong>@com.Utilisateur</strong> • @com.DateCommentaire.ToShortDateString()
+                                <strong>@com.username</strong> • @com.datecommentaire.ToShortDateString()
                             </p>
                             <p class="stars">
-                                @* @Html.Raw(new string('★', com.Note) + new string('☆', 5 - com.Note)) *@
+                                @Html.Raw(new string('★', com.note) + new string('☆', 5 - com.note))
                             </p>
-                            <p class="text">@com.Texte</p>
+                            <p class="text">@com.commentaire</p>
                         </div>
                     </div>
                 }
@@ -96,11 +103,11 @@
             <!-- Formulaire d'ajout -->
             <form class="comment-form" method="post" asp-action="AjouterCommentaire" asp-route-jeuId="@Model.JeuId">
                 <label for="comment" class="visually-hidden">Votre commentaire</label>
-                <textarea id="comment" name="texte" placeholder="Écrire un commentaire..." required></textarea>
+                <textarea id="comment" name="commentaire" placeholder="Écrire un commentaire..." required></textarea>
 
                 <div class="form-actions">
-                    <label for="note" class="visually-hidden">Votre note</label>
-                    <select id="note" name="note">
+                    <label for="note_selector" class="visually-hidden">Votre note</label>
+                    <select id="note_selector" name="note">
                         <option value="">Choisissez votre note...</option>
                         <option value="5">★★★★★</option>
                         <option value="4">★★★★☆</option>

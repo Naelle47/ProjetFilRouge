@@ -147,6 +147,7 @@ namespace ProjetFilRouge.Controllers
             // TODO vérifier model
             // TODO enlever l'étoile
             string query = "SELECT * FROM utilisateurs JOIN Roles on roleid_fk=roles.id WHERE email=@email AND emailverified=true";
+
             try
             {
                 Utilisateur userFromBDD;
@@ -171,7 +172,7 @@ namespace ProjetFilRouge.Controllers
                     List<Claim> claims = new List<Claim>()
                     {
                         new Claim(ClaimTypes.Email, userFromBDD.email),
-                        new Claim(ClaimTypes.NameIdentifier, userFromBDD.utilisateurid.ToString()),
+                        new Claim(ClaimTypes.NameIdentifier, userFromBDD.utilisateurid_pk.ToString()),
                         new Claim(ClaimTypes.Name, userFromBDD.username),
                         new Claim(ClaimTypes.Role, userFromBDD.role.name ),
                      };
