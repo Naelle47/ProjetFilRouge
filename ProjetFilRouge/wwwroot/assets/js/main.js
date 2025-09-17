@@ -19,18 +19,20 @@ document.querySelectorAll('.accordion-header').forEach(header => {
 });
 
 // PASSWORD VALIDATION
-//const password = document.getElementById("signup-password");
-//const confirmPassword = document.getElementById("signup-confirm-password");
-//const message = document.getElementById("password-match-message");
+document.addEventListener("DOMContentLoaded", function () {
+    const password = document.getElementById("signup-password");
+    const confirmPassword = document.getElementById("signup-confirm-password");
+    const message = document.getElementById("password-match-message");
 
-//document.querySelector("form").addEventListener("submit", function (e) {
-//    if (password.value !== confirmPassword.value) {
-//        e.preventDefault();
-//        message.textContent = "Passwords do not match!";
-//    } else {
-//        message.textContent = "";
-//    }
-//});
+    document.querySelector("form").addEventListener("submit", function (e) {
+        if (password.value !== confirmPassword.value) {
+            e.preventDefault();
+            message.textContent = "Passwords do not match!";
+        } else {
+            message.textContent = "";
+        }
+    });
+});
 
 // API FETCH
 async function rechercheJeu() {
@@ -48,11 +50,12 @@ async function rechercheJeu() {
 
     document.getElementById("affichageRecherche").innerHTML = ""; // 
     jeux.forEach(j => AfficherJeu(j));
+
 }
 function AfficherJeu(jeu) {
 
     console.log("Affichage d’un jeu:", jeu); // log each object
-    
+
     let j = document.createElement("div");
     let titre = document.createElement("a");
     titre.href = "http://localhost:5106/Jeux/Detail/" + jeu.jeuId;
@@ -63,13 +66,14 @@ function AfficherJeu(jeu) {
 
 let barreRecherche = document.getElementById("recherche");
 barreRecherche.addEventListener("input", rechercheJeu);
-
 async function toggleRecherche() {
+    const delay = 200;
     let divRecherche = document.getElementById("affichageRecherche");
     if (divRecherche.classList.contains("active")) {
-        await delay(500);
+        await delay(200);
     }
     divRecherche.classList.toggle("active");
 }
 barreRecherche.addEventListener("focus", toggleRecherche);
 barreRecherche.addEventListener("focusout", toggleRecherche);
+

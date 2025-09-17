@@ -1,0 +1,24 @@
+﻿@model int?
+
+@{
+    int? codeErreur = Model;
+    string message;
+
+    switch (codeErreur)
+    {
+        case 404:
+            message = "Erreur 404 : Page non trouvée.";
+            break;
+        case 500:
+            message = "Erreur 500 : Erreur interne du serveur.";
+            break;
+        default:
+            message = codeErreur.HasValue ? $"Erreur {codeErreur}." : "Une erreur est survenue.";
+            break;
+    }
+}
+
+<h1>@message</h1>
+<p>
+    <a href="/">Retour à l'accueil</a>
+</p>

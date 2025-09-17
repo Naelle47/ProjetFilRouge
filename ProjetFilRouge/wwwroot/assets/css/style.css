@@ -991,6 +991,7 @@ a {
 .search-bar {
     position: relative; /* pour que l’affichage se place par rapport à la barre */
     width: 250px; /* largeur fixe (à ajuster) */
+    background: transparent;
 }
 
 #recherche {
@@ -1000,35 +1001,30 @@ a {
 }
 
 #affichageRecherche {
-    display :block;
-    width : 150px;
-    height : 400px;
+    display :none;
     position: absolute;
-    /*top: 100%;*/ /* juste en dessous de l’input */
+    top : 100%;
     left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #ccc;
+    width : 100%;
     max-height: 200px;
     overflow-y: auto;
-/*    display: none;*/
     z-index: 1000;
 }
 
-    #affichageRecherche.active {
-        display: block; /* affiché quand on ajoute la classe active */
+#affichageRecherche.active {
+    display: block; /* affiché quand on ajoute la classe active */
     }
 
-    #affichageRecherche .result-item {
-        display: block;
-        padding: 8px 10px;
-        text-decoration: none;
-        color: black;
+#affichageRecherche .result-item {
+   display: block;
+   padding: 8px 10px;
+   text-decoration: none;
+   color: black;
     }
 
    #affichageRecherche .result-item:hover {
-            background: #f0f0f0;
-        }
+   background: #f0f0f0;
+   }
 
 
 /* =============================================================================== */

@@ -24,26 +24,10 @@ namespace ProjetFilRouge.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(int? code)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        [Route("/Home/HandleError/{statusCode}")]
-        public IActionResult HandleError(int statusCode)
-        {
-            if (statusCode == 403)
-            {
-                return View("AccessDenied");
-            }
-            else if (statusCode == 404)
-            {
-                return View("NotFound");
-            }
-            else
-            {
-                return View("AutresErreurs");
-            }
+            Response.StatusCode = code ?? 500; // Définit le code HTTP de la réponse
+            return View("Error", code);
         }
     }
-}
+    }
