@@ -1,0 +1,94 @@
+﻿@model Contact
+@{
+    ViewData["Title"] = " Contact Us " ;
+
+}
+@if (ViewData.ContainsKey("ValidateMessage"))
+{
+    <p>@ViewData["ValidateMessage"]</p>
+}
+
+<main>
+    <section class="contact | padding-block-900">
+        <h1 class="fs-primary-heading text-center">Contact Us</h1>
+        <p class="text-center text-neutral-100">
+            An issue or suggestion ? Feel free to drop us a message.
+        </p>
+        <div class="container">
+            <!-- FORM CONTENT -->
+            <div class="auth-box even-columns">
+                <div class="left-panel">
+                    <div class="hours-container">
+                        <h2>Opening Hours</h2>
+                        <div class="day">
+                            <span class="day-name">Monday : </span><span class="closed">Closed</span>
+                        </div>
+                        <div class="day">
+                            <span class="day-name">Tuesday : </span><span>5 PM – 11 PM</span>
+                        </div>
+                        <div class="day">
+                            <span class="day-name">Wednesday : </span><span>5 PM – 11 PM</span>
+                        </div>
+                        <div class="day">
+                            <span class="day-name">Thursday : </span><span>5 PM – 11 PM</span>
+                        </div>
+                        <div class="day">
+                            <span class="day-name">Friday : </span><span>5 PM – 1 AM</span>
+                        </div>
+                        <div class="day">
+                            <span class="day-name">Saturday : </span><span>2 PM – 1 AM</span>
+                        </div>
+                        <div class="day">
+                            <span class="day-name">Sunday : </span><span>2 PM – 10 PM</span>
+                            <hr />
+                            <h2>Where to Find Us</h2>
+                            <p>
+                                <strong>Nivo Ltd</strong><br />
+                                42 Camden Wharf, NW1 8SU, United Kingdom<br />
+                                Email:
+                                <a href="mailto:[app@nivo.fr]">app@nivo.fr</a><br />
+                                Phone: +44 20 79 46 21 84
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-panel">
+                    <div class="form">
+                        <form asp-action="Contact" method="post">
+                            <label for="pseudo" class="visually-hidden">Pseudo (Username)</label>
+                            <input type="text"
+                                   name="pseudo"
+                                   id="pseudo"
+                                   placeholder="Pseudo" />
+
+                            <label for="email" class="visually-hidden">Adresse e-mail</label>
+                            <input type="email"
+                                   name="email"
+                                   id="email"
+                                   placeholder="Email" />
+
+                            <label for="subject" class="visually-hidden">Objet du message</label>
+                            <input type="text"
+                                   name="subject"
+                                   id="subject"
+                                   placeholder="Objet du message" />
+
+                            <label for="message" class="visually-hidden">Votre message</label>
+                            <textarea name="message"
+                                      id="message"
+                                      placeholder="Votre message..."></textarea>
+                            <button type="submit">Envoyer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- END FORM CONTENT -->
+        </div>
+    </section>
+</main>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

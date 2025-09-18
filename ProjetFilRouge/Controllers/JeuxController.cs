@@ -149,10 +149,8 @@ namespace ProjetFilRouge.Controllers
             }
             catch (Exception ex)
             {
-                // Tu peux log l’erreur ici si besoin
+                // Log de l’erreur ici si besoin
                 return StatusCode(500, "Une erreur est survenue lors du chargement des données.");
-
-
             }
         }
 

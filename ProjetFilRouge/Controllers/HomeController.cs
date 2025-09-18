@@ -29,5 +29,27 @@ namespace ProjetFilRouge.Controllers
             Response.StatusCode = code ?? 500; // Définit le code HTTP de la réponse
             return View("Error", code);
         }
+
+        // Formulaire de contact
+        [HttpGet]
+        public IActionResult Contact()
+        { 
+            return View(); 
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Contact(Contact model) 
+        {
+            if(!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Traitement ici (ex. : envoi d'email, sauvegarde, log)
+            ViewData["ValidateMessage"] = "Merci pour votre message ! Nous reviendrons vers vous rapidement.";
+            return RedirectToAction("Contact");
+        }
+
     }
-    }
+}

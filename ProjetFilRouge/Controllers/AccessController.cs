@@ -191,7 +191,7 @@ namespace ProjetFilRouge.Controllers
                     {
                         return Redirect(Request.Form["ReturnUrl"]!);
                     }
-                    return RedirectToAction("Index", "Jeux");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {

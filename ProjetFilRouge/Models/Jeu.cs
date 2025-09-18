@@ -3,7 +3,6 @@ namespace ProjetFilRouge.Models
 {
     public class Jeu
     {
-
         public int JeuId { get; set; }
 
         [Required(ErrorMessage ="Le champ est obligatoire.")]
@@ -25,14 +24,12 @@ namespace ProjetFilRouge.Models
         [DataType(DataType.Date)]
         public DateTime DateAjout { get; set; }
 
-        // relations 
         public required IFormFile ImageFile { get; set; }
 
+        // relations
         public List<Commentaire> Commentaires { get; set; } = new List<Commentaire>();
-
         public List<Categorie> Categories { get; set; } = new List<Categorie>(); // pour l'affichage
-        public List<int> CategorieIds { get; set; } //pour l'édition
-
         public List<Theme> Themes { get; set; } = new List<Theme>();
+
     }
 }
