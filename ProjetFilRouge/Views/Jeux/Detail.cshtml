@@ -102,6 +102,7 @@
 
             <!-- Formulaire d'ajout -->
             <form class="comment-form" method="post" asp-action="AjouterCommentaire" asp-route-jeuId="@Model.JeuId">
+                @Html.AntiForgeryToken()
                 <label for="comment" class="visually-hidden">Votre commentaire</label>
                 <textarea id="comment" name="commentaire" placeholder="Écrire un commentaire..." required></textarea>
 

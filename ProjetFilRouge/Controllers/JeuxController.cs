@@ -154,66 +154,7 @@ namespace ProjetFilRouge.Controllers
             }
         }
 
-        [Authorize]
-        public async Task<IActionResult> AjouterCommentaire(Commentaire comm, int JeuId)
-        {
-            try
-            {
-                var utilisateurId = User.FindFirst(ClaimTypes.NameIdentifier);
-                var utilisateurNom = User.FindFirst(ClaimTypes.Name);
 
-                comm.jeuid_fk = JeuId;
-                comm.utilisateurid_fk = int.Parse(utilisateurId.Value);
-                comm.username = utilisateurNom.Value;
-
-                using (var con = new NpgsqlConnection(_connexionString))
-                {
-                    await con.OpenAsync();
-
-                    string queryJeuTitre = "SELECT titre FROM jeux WHERE jeuid_pk = @JeuId_PK";
-
-                    string jeuTitre = con.QuerySingle<string>(queryJeuTitre, new { JeuId_PK = JeuId });
-
-                    comm.titre = jeuTitre;
-
-                    Console.WriteLine($"jeuid_fk={comm.jeuid_fk}, utilisateurid_fk={comm.utilisateurid_fk}, commentaire={comm.commentaire}, note={comm.note}");
-
-                    string insertQuery = @"INSERT INTO commentaires (jeuid_fk, utilisateurid_fk, commentaire, note)
-                                           VALUES (@jeuid_fk, @utilisateurid_fk, @commentaire, @note)";
-
-                    try
-                    {
-                        await con.ExecuteAsync(insertQuery, comm);
-                    }
-                    catch (PostgresException e) when (e.SqlState == "23505")
-                    {
-                        TempData["Commentaire Erreur"] = "Vous avez déjà commenté ce jeu.";
-                        return RedirectToAction("Detail", new {id = JeuId});
-                    }
-                }
-
-                return RedirectToAction("Detail", new {id = JeuId });
-            }
-            catch(Exception e)
-            {
-                TempData["Commentaire Erreur"] = "Une erreur est survenue pendant l'ajout de votre commentaire, essayez de nouveau.";
-                return RedirectToAction("Detail", new { id = JeuId });
-            }
-        }
-
-        // API FETCH - Rechercher les Jeux par Nom
-        [HttpGet]
-        public IActionResult RechercheJeu([FromQuery] string titre)
-        {
-            string query = "SELECT jeuid_pk as JeuId,titre FROM jeux WHERE lower(titre) like lower(@Titre)";
-            List<Jeu> jeux;
-            using (var connexion = new NpgsqlConnection(_connexionString))
-            {
-                jeux = connexion.Query<Jeu>(query, new { Titre = "%" + titre + "%" }).ToList();
-            }
-            return Json(jeux);
-
-        }
 
         // Formulaires pour un Nouveau Jeu
         [HttpGet]
