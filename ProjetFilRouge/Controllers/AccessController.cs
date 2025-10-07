@@ -150,6 +150,7 @@ namespace ProjetFilRouge.Controllers
 
             try
             {
+                // écriture LINQ pour récupérer l'utilisateur
                 Utilisateur userFromBDD;
                 using (var connexion = new NpgsqlConnection(_connexionString))
                 {
