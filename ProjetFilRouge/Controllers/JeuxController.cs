@@ -13,7 +13,7 @@ namespace ProjetFilRouge.Controllers
         private readonly string _connexionString;
 
         /// <summary>
-        /// Constructeur de LivresController
+        /// Constructeur de JeuxController
         /// </summary>
         /// <param name="configuration">configuration de l'application</param>
         /// <exception cref="Exception"></exception>
